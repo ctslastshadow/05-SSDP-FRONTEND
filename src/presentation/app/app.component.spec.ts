@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'mf-template'`, () => {
+  it(`should have as title '05-SSDP'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('mf-template');
+    expect(app.title).toEqual('05-SSDP');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('mf-template app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('05-SSDP app is running!');
   });
 });

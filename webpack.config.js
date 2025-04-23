@@ -3,10 +3,10 @@ const { shareAll, share, withModuleFederationPlugin, SharedMappings } = require(
 
  const moduleFederationConfig = withModuleFederationPlugin({
 
-    name: '05-SDP-NEW',
+    name: '05-SSDP-FRONTEND',
 
     exposes: {
-        './TemplateModule': './src/presentation/app/template/template.module.ts',
+        './SdpModule': './src/presentation/app/sdp/sdp.module.ts',
     },
 
     /* shared: {
@@ -26,8 +26,8 @@ const { shareAll, share, withModuleFederationPlugin, SharedMappings } = require(
         }
       }),
 });
-moduleFederationConfig.output.publicPath = 'http://localhost:4201/mf-sdp/';
-//moduleFederationConfig.output.publicPath = 'https://frontend-apps-desa.cne.gob.ec/mf-sdp/' //Desa
+//moduleFederationConfig.output.publicPath = 'http://localhost:4201/mf-sdp/';
+moduleFederationConfig.output.publicPath = 'https://frontend-apps-desa.cne.gob.ec/mf-sdp/' //Desa
 //moduleFederationConfig.output.publicPath = 'https://frontend-apps-test.cne.gob.ec/mf-sdp/' //test
 // moduleFederationConfig.output.publicPath = 'https://frontend-apps.cne.gob.ec/mf-sdp/' //prod
 

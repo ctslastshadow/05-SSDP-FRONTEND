@@ -1,12 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'sdp',
     loadChildren: () =>
-      import('./template/template.module').then((m) => m.TemplateModule),
+      import('./sdp/sdp.module').then((m) => m.SdpModule),
   },
 ];
 
