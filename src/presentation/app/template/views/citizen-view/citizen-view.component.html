@@ -1,0 +1,7 @@
+<div>
+    <h2 class="content-block">Ciudadano</h2>
+  <div class="content-block dx-card responsive-paddings content-grid">
+    <cne-data-grid [dataSource]="citizenList" [pageSize]="5" [columns]="columns" mode="single" titleEditPopUp="Editar Ciudadano"
+    (onSelectionChanged)="changeProcess($event)" (onSaving)="onSaving($event)" [isLoading]="isLoading"></cne-data-grid>
+  </div>
+  </div>

@@ -1,0 +1,57 @@
+<div id="data-grid-demo">
+    <dx-load-panel [position]="loadPanelPosition" [visible]="isLoading">
+    </dx-load-panel>
+    <dx-data-grid
+      [dataSource]="dataSource"
+      [keyExpr]="keyExpr"
+      [columnAutoWidth]="true"
+      [showBorders]="true"
+      (onSelectionChanged)="onSelectionChangedLibrary($event)"
+      (onSaving)="onSavingLibrary($event)"
+      >
+      <dxi-column *ngFor="let col of columns" [dataField]="col.field" [caption]="col.name" [allowEditing]="col.isEditing"></dxi-column>
+      <dxo-selection [mode]="mode">
+      </dxo-selection>
+      <dxo-paging 
+          [pageSize]="pageSize"
+          [pageIndex]="0"
+          [enabled]="enabled"
+      ></dxo-paging>
+      <dxo-pager
+          [showPageSizeSelector]="false"
+          [showNavigationButtons]="true"
+          [showInfo]="true"
+          infoText="Página #{0} del Total: {1} ({2} items)"
+      ></dxo-pager>
+      <dxo-editing
+        [mode]="editMode"
+        [allowUpdating]="allowUpdating"
+        [allowAdding]="allowAdding"
+        [allowDeleting]="allowDeleting"
+        [useIcons]="useIcons"
+      >
+        <dxo-popup
+          [title]="titleEditPopUp"
+          [showTitle]="true"
+          [width]="700"
+          [height]="525"
+        >
+        </dxo-popup>
+        <dxo-form>
+          <dxi-item itemType="group" [colCount]="1" [colSpan]="1">
+            <dxi-item *ngFor="let col of columns" dataField="{{col.field}}" caption="{{col.name}}" [visible]="col.isVisible"></dxi-item>
+          </dxi-item>
+  
+          <!-- <dxi-item
+            itemType="group"
+            caption="Home Address"
+            [colCount]="2"
+            [colSpan]="2"
+          >
+            <dxi-item dataField="StateID"></dxi-item>
+            <dxi-item dataField="Address"></dxi-item>
+          </dxi-item> -->
+        </dxo-form>
+      </dxo-editing>
+    </dx-data-grid>
+  </div>
