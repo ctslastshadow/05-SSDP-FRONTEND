@@ -49,9 +49,9 @@
 .footer {
     width: 100%;
     text-align: center;
-    position: left;
+    position: fixed;
     /* Esto mantendrá el pie de página centrado en la parte inferior de la pantalla */
-    bottom: 0;
+    bottom: 2%;
     /* Alinea el pie de página al borde inferior de la pantalla */
     color: #f0f0f0;
     /* Cambia el color de fondo según tus preferencias */

@@ -7,7 +7,7 @@ const routes: Routes = [
     path: '', component: ConsultaComponent
   },
   {
-    path: 'app-consulta', component: ConsultaComponent
+    path: 'consulta', component: ConsultaComponent
   },
   {
     path: '**', redirectTo: ''

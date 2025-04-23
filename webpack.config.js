@@ -1,8 +1,7 @@
 
-const { shareAll, share, withModuleFederationPlugin, SharedMappings } = require('@angular-architects/module-federation/webpack');
+const { share, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
 
  const moduleFederationConfig = withModuleFederationPlugin({
-
     name: '05-SSDP-FRONTEND',
 
     exposes: {
@@ -26,8 +25,8 @@ const { shareAll, share, withModuleFederationPlugin, SharedMappings } = require(
         }
       }),
 });
-//moduleFederationConfig.output.publicPath = 'http://localhost:4201/mf-sdp/';
-moduleFederationConfig.output.publicPath = 'https://frontend-apps-desa.cne.gob.ec/mf-sdp/' //Desa
+moduleFederationConfig.output.publicPath = 'http://localhost:4201/';
+//moduleFederationConfig.output.publicPath = 'https://frontend-apps-desa.cne.gob.ec/mf-sdp/' //Desa
 //moduleFederationConfig.output.publicPath = 'https://frontend-apps-test.cne.gob.ec/mf-sdp/' //test
 // moduleFederationConfig.output.publicPath = 'https://frontend-apps.cne.gob.ec/mf-sdp/' //prod
 
