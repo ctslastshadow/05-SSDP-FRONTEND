@@ -1,4 +1,6 @@
+declare const __webpack_public_path__: string;
 export const environment = {
-    production: false,
-    apiUrl: 'http://localhost:4201/'
+    apiUrl: 'https://backend-apps-test.cne.gob.ec/suspension/api/', //PARA LOCAL  
+    baseModule: 'sdp/',
+    baseUrlAssets: __webpack_public_path__
 };

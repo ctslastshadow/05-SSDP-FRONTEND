@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CitizenRepository } from 'src/domain/repositories/citizen.repository';
-import { CitizenImplementationRepository } from './repositories/citizen-implementation.repository';
 import { HttpClientModule } from '@angular/common/http';
+
+import { CitizenRepository } from 'src/domain/repositories/citizen.repository';
 import { CitizenUseCase } from 'src/domain/usecases/citizen.usecase';
-import { SaveCitizenUseCase } from 'src/domain/usecases/saveCitizen.usecase';
-import { UpdateCitizenUseCase } from 'src/domain/usecases/updateCitizen.usecase';
-import { DeleteCitizenUseCase } from 'src/domain/usecases/deleteCitizen.usecase';
+
+import { ACJudicaturaService } from 'src/domain/consJudicatura/services/a-consJuditatura-service';
+import { GetCJudicaturaUseCase } from 'src/domain/consJudicatura/useCases/get-consJudicatura.useCase';
+import { CJudicaturaService } from './consJudicatura/service/consJudicatura.service';
+import { CJudicaturaMapper } from './consJudicatura/mappers/consJudicatura-mapper';
 
 const CitizenCaseFactory = 
 (citizenRepo: CitizenRepository) => new CitizenUseCase(citizenRepo);
@@ -16,37 +18,23 @@ export const citizenUseCaseProvider = {
     deps: [CitizenRepository],
 };
 
-const SaveCitizenCaseFactory = 
-(saveCitizenRepo: CitizenRepository) => new SaveCitizenUseCase(saveCitizenRepo);
-export const saveCitizenUseCaseProvider = {
-    provide: SaveCitizenUseCase,
-    useFactory: SaveCitizenCaseFactory,
-    deps: [CitizenRepository],
+//* CJSentencias
+const GetCJudicaturaUseCaseFactory =
+  (aCJudicaturaService: ACJudicaturaService) => new GetCJudicaturaUseCase(aCJudicaturaService);
+export const getCJudicaturaUseCaseProvider = {
+  provide: GetCJudicaturaUseCase,
+  useFactory: GetCJudicaturaUseCaseFactory,
+  deps: [ACJudicaturaService],
 };
 
-const UpdateCitizenCaseFactory = 
-(updateCitizenRepo: CitizenRepository) => new UpdateCitizenUseCase(updateCitizenRepo);
-export const updateCitizenUseCaseProvider = {
-    provide: UpdateCitizenUseCase,
-    useFactory: UpdateCitizenCaseFactory,
-    deps: [CitizenRepository],
-};
-
-const DeleteCitizenCaseFactory = 
-(deleteCitizenRepo: CitizenRepository) => new DeleteCitizenUseCase(deleteCitizenRepo);
-export const deleteCitizenUseCaseProvider = {
-    provide: DeleteCitizenUseCase,
-    useFactory: DeleteCitizenCaseFactory,
-    deps: [CitizenRepository],
-};
 @NgModule({
   declarations: [],
   providers: [
     citizenUseCaseProvider,
-    saveCitizenUseCaseProvider,
-    updateCitizenUseCaseProvider,
-    deleteCitizenUseCaseProvider,
-    { provide: CitizenRepository, useClass: CitizenImplementationRepository }
+
+    getCJudicaturaUseCaseProvider,
+    CJudicaturaMapper,
+    { provide: ACJudicaturaService, useClass: CJudicaturaService }
   ],
   imports: [
     CommonModule,

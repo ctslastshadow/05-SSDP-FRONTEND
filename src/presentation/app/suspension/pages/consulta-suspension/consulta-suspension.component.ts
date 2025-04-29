@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { AlertsService } from 'src/base/alerts.service';
 import { LoaderService } from 'src/base/loader.service';
 
+import { IGetSentenciasRegistroViewModel } from 'src/domain/consJudicatura/viewModels/i-sentencias.viewModel';
+import { GetCJudicaturaUseCase } from 'src/domain/consJudicatura/useCases/get-consJudicatura.useCase';
+
 @Component({
   selector: 'app-consulta-suspension',
   templateUrl: './consulta-suspension.component.html',
@@ -12,22 +15,24 @@ export class ConsultaSuspensionComponent {
   resultado: any = null;
   displayedColumns: string[] = ['campo1', 'campo2']; 
 
+  public dataJudicatura: any[] = [];
+
   constructor(
     private alerts: AlertsService,
-    public loader: LoaderService
+    public loader: LoaderService,
+    private _getCJudicaturaUseCase: GetCJudicaturaUseCase
   ) {}
 
   buscarInfoSuspension() {
     if (!this.validarCedulaEcuatoriana(this.cedula)) { 
       this.alerts.alertMessage('Error', 'Ingrese una cédula válida de 10 dígitos.', 'error');
       return;
-    } else {
-      console.log('Cédula válida. Procediendo a buscar información...');
-
+    } else { 
       // Mostrar el loader
       this.loader.display(true);
 
-      // Simulamos que se tarda en buscar
+      this.getCJSentenciasCedula()
+      
       setTimeout(() => {
         this.resultado = [
           { campo1: 'Nombre', campo2: 'Juan Perez' },
@@ -37,10 +42,22 @@ export class ConsultaSuspensionComponent {
        
         this.loader.display(false);
 
-        // Mensaje de éxito
         this.alerts.alertMessage('Búsqueda Exitosa', 'Información encontrada.', 'success');
       }, 500);
     }
+  }
+
+ //metodo para buscar las sentencias del consejo de la Judicatura
+  public async getCJSentenciasCedula() {
+    let body: IGetSentenciasRegistroViewModel = {
+      cedula: this.cedula,
+      sentencia: ""
+    }
+
+    const result = await this._getCJudicaturaUseCase.getCJSentenciasCedula(body).toPromise();
+
+    this.dataJudicatura = result!.data!;
+    console.log('result ', result)
   }
 
   validarCedulaEcuatoriana(cedula: string): boolean {
@@ -62,4 +79,5 @@ export class ConsultaSuspensionComponent {
     const digitoVerificador = (10 - (suma % 10)) % 10;
     return digitoVerificador === digitos[9];
   }
+
 }
