@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CiudadanosRoutingModule } from './ciudadanos-routing.module';
-import { ConsultaComponent } from './pages/consulta/consulta.component';
+
+import { RestitucionRoutingModule } from './restitucion-routing.module';
+import { ConsultaRestitucionComponent } from './pages/consulta-restitucion/consulta-restitucion.component';
 
 // DevExtreme
 import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
@@ -9,20 +10,20 @@ import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { DxValidatorModule } from 'devextreme-angular/ui/validator';
 import { DxValidationGroupModule } from 'devextreme-angular/ui/validation-group';
-@NgModule({
-  declarations: [  
-    ConsultaComponent
 
+
+@NgModule({
+  declarations: [
+    ConsultaRestitucionComponent
   ],
   imports: [
     CommonModule,
-    CiudadanosRoutingModule,
+    RestitucionRoutingModule,
     DxTextBoxModule,
     DxButtonModule,
     DxDataGridModule,
     DxValidatorModule,
     DxValidationGroupModule,
-  ],
-  exports: [ConsultaComponent  ]
+  ]
 })
-export class CiudadanosModule { }
+export class RestitucionModule { }

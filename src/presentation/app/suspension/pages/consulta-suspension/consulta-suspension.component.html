@@ -1,0 +1,28 @@
+<div *ngIf="loader.status | async" class="loader-overlay">
+    <div class="loader"></div>
+</div>
+  
+  <div class="busqueda-container">
+    <h1 class="titulo-principal">Suspensión de Derechos Políticos</h1>
+  
+    <div class="formulario-busqueda">
+      <dx-text-box [(value)]="cedula" placeholder="Ingrese la cédula" width="300"></dx-text-box>
+      <dx-button text="Buscar" (onClick)="buscarInfoSuspension()" type="success" icon="search"></dx-button>
+    </div>
+  
+    <dx-data-grid
+      *ngIf="resultado"
+      [dataSource]="resultado"
+      [showBorders]="true"
+      [columnAutoWidth]="true"
+      [rowAlternationEnabled]="true"
+      class="tabla-resultado"
+    >
+      <dxi-column dataField="campo1" caption="Campo"></dxi-column>
+      <dxi-column dataField="campo2" caption="Valor"></dxi-column>
+    </dx-data-grid>
+  </div>
+  
+  <div *ngIf="loader.status | async" class="loader-overlay">
+    <div class="loader"></div>
+  </div>

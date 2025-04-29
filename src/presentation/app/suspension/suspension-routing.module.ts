@@ -1,20 +1,22 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ConsultaComponent } from './pages/consulta/consulta.component';
+import { ConsultaSuspensionComponent } from './pages/consulta-suspension/consulta-suspension.component';
 
 const routes: Routes = [
   {
-    path: '', component: ConsultaComponent
+    path: '', component: ConsultaSuspensionComponent
   },
   {
-    path: 'suspConsulta', component: ConsultaComponent
+    path: 'consulta', component: ConsultaSuspensionComponent
   },
   {
     path: '**', redirectTo: ''
   },
+
 ];
+
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class CiudadanosRoutingModule { }
+export class SuspensionRoutingModule { }

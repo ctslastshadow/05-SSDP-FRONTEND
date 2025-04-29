@@ -24,3 +24,32 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
   }
+
+  .busqueda-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 50px;
+    gap: 30px;
+  }
+  
+  .titulo-principal {
+    padding-top: 10px;
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    text-align: center;
+    font-family: 'Poppins', 'Roboto', 'Segoe UI', sans-serif;
+  }
+  
+  .formulario-busqueda {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  
+  .tabla-resultado {
+    width: 80%;
+    margin-top: 30px;
+  }

@@ -3,11 +3,11 @@ import { AlertsService } from 'src/base/alerts.service';
 import { LoaderService } from 'src/base/loader.service';
 
 @Component({
-  selector: 'app-consulta',
-  templateUrl: './consulta.component.html',
-  styleUrls: ['./consulta.component.scss']
+  selector: 'app-consulta-suspension',
+  templateUrl: './consulta-suspension.component.html',
+  styleUrls: ['./consulta-suspension.component.scss']
 })
-export class ConsultaComponent {
+export class ConsultaSuspensionComponent {
   cedula: string = '';
   resultado: any = null;
   displayedColumns: string[] = ['campo1', 'campo2']; 
@@ -62,5 +62,4 @@ export class ConsultaComponent {
     const digitoVerificador = (10 - (suma % 10)) % 10;
     return digitoVerificador === digitos[9];
   }
-
 }

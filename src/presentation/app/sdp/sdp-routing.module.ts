@@ -12,6 +12,14 @@ const routes: Routes = [
     path: 'ciudadanos',
     loadChildren: () => import('../../../presentation/app/ciudadanos/ciudadanos.module').then((m) => m.CiudadanosModule),
   },
+  {
+    path: 'suspension',
+    loadChildren: () => import('../../../presentation/app/suspension/suspension.module').then((m) => m.SuspensionModule),
+  },
+  {
+    path: 'restitucion',
+    loadChildren: () => import('../../../presentation/app/restitucion/restitucion.module').then((m) => m.RestitucionModule),
+  },
 ]
 
 

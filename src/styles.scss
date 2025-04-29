@@ -1,19 +1,218 @@
 /* You can add global styles to this file, and also import other style files */
-.dx-datagrid-headers {
+
+@import 'colors';
+
+body {
+    margin: 0;
+}
+
+::ng-deep label,
+.dx-checkbox-text {
+    font-weight: 700 !important;
+}
+
+::ng-deep .dx-texteditor.dx-state-readonly {
+    background: #e7e7e7 !important;
+}
+
+/**fieldset sin titulo */
+::ng-deep .fieldsetST {
+    padding: 20px 10px 10px 10px;
+    margin-bottom: 20px;
+    border: 1px solid $color-primario;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+}
+
+/**fieldset con titulo */
+::ng-deep .fieldsetCT {
+    padding: 35px 10px 10px 10px;
+    position: relative;
+    text-align: left;
+    margin-bottom: 20px;
+    border: 1px solid $color-primario;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    box-sizing: border-box !important;
+    -moz-box-sizing: border-box !important;
+    background-color: rgba(255, 255, 255, 0.5) !important;
+    border-radius: 5px !important;
+}
+
+/**legend con titulo */
+::ng-deep .fieldsetCT .legendCT {
+    position: absolute !important;
+    top: 3px !important;
+    left: 0px !important;
+    background-color: $color-primario;
+    font-size: 16px !important;
+    width: inherit !important;
+    color: white !important;
+    font-weight: bold !important;
+    /* font-style: italic; */
+    padding: 8px 8px 8px 25px !important;
+    border-left: 8px solid rgba(0, 0, 0, 0.2) !important;
+    box-sizing: border-box !important;
+}
+
+::ng-deep .file-uploader-p {
+    padding-left: 0% !important;
+    margin-top: -10px !important;
+}
+
+
+
+::ng-deep .dx-fileuploader-button .dx-button-text {
+    color: #fff;
+    // text-decoration: underline;
+    cursor: pointer;
+}
+
+::ng-deep .dx-fileuploader-button.dx-widget {
+    box-shadow: none !important;
+    border: none;
+    background-color: $color-primario !important;
+    border-color: transparent;
+    color: #fff;
+}
+
+::ng-deep .dx-fileuploader-button.dx-widget:hover {
+    color: #fff;
+    // text-decoration: underline;
+    cursor: pointer;
+    background-color: $color-primario-hover !important;
+    border-color: transparent;
+}
+
+::ng-deep .dx-fileuploader-button.dx-widget:active {
+    color: #fff;
+    // text-decoration: underline;
+    cursor: pointer;
+    background-color: $color-primario-dark !important;
+    border-color: transparent;
+}
+
+::ng-deep .dx-fileuploader-button.dx-widget:focus {
+    color: #fff;
+    // text-decoration: underline;
+    cursor: pointer;
+    background-color: $color-primario-hover !important;
+    border-color: transparent;
+}
+
+::ng-deep .dx-button-mode-contained.dx-state-active {
+    background-color: $color-primario-hover !important;
+}
+
+::ng-deep .dx-popup-content {
+    padding: 0px !important;
+}
+
+::ng-deep .swal2-container {
+    z-index: 99999999 !important;
+}
+
+::ng-deep .listButtonDelete {
+    scale: 0.7 !important;
+}
+
+::ng-deep .list-no-style li {
+    list-style: none !important;
+}
+
+::ng-deep .list-no-style ul {
+    padding-left: 5px !important;
+}
+
+// estilo para data grid
+::ng-deep .dx-datagrid-headers {
     color: #ffffff !important;
-    background: #005CA8;
-    font-weight: 400;
-    -ms-touch-action: pinch-zoom;
-    touch-action: pinch-zoom;
-    border-bottom: 1px solid #4d4d4d;
-  }
-  .dx-datagrid-rowsview .dx-select-checkboxes-hidden > tbody > tr > td > .dx-select-checkbox {
-    display: inline-block;
+    background: $color-primario !important;
+    font-weight: 400 !important;
+    -ms-touch-action: pinch-zoom !important;
+    touch-action: pinch-zoom !important;
+    border-bottom: 1px solid #4d4d4d !important;
 }
-.dx-treeview-item {
-    border-bottom: solid 1px;
-    border-color: rgb(207, 205, 205);
+
+::ng-deep .dx-datagrid-rowsview .dx-select-checkboxes-hidden>tbody>tr>td>.dx-select-checkbox {
+    display: inline-block !important;
 }
-.dx-popup-content {
-    padding: 15px;
+
+
+::ng-deep .dx-popup-content {
+    padding: 15px !important;
 }
+
+::ng-deep .dx-datagrid-filter-row {
+    background: white !important;
+}
+
+::ng-deep .dx-button-mode-contained.dx-button-default {
+    background-color: $color-primario !important;
+}
+
+::ng-deep .dx-button-mode-contained.dx-button-default.dx-state-hover {
+    background-color: $color-primario-hover !important;
+}
+
+::ng-deep .dx-button-mode-contained.dx-button-default.dx-state-active {
+    background-color: $color-primario-dark !important;
+}
+
+::ng-deep .dx-widget.dx-button.dx-button-mode-contained.dx-button-normal.dx-button-has-text.dx-button-has-icon.dx-datagrid-export-button.dx-button-mode-contained.dx-state-hover {
+    background: $color-primario-hover !important;
+}
+
+::ng-deep .dx-widget.dx-button.dx-button-mode-contained.dx-button-normal.dx-button-has-text.dx-button-has-icon.dx-datagrid-export-button.dx-button-mode-contained.dx-state-active {
+    background: $color-primario-dark !important;
+}
+
+::ng-deep .dx-widget.dx-button.dx-button-mode-contained.dx-button-normal.dx-button-has-text.dx-button-has-icon.dx-datagrid-export-button {
+    background: $color-primario !important;
+}
+
+::ng-deep .dx-widget.dx-button.dx-button-mode-contained.dx-button-normal.dx-button-has-text.dx-button-has-icon.dx-datagrid-export-button.dx-button-mode-contained .dx-icon {
+    color: white !important;
+}
+
+::ng-deep .dx-popup-title.dx-toolbar .dx-toolbar-label {
+    font-weight: 500 !important;
+}
+
+::ng-deep span.text-danger {
+    color: #820000 !important;
+    font-size: 12px;
+}
+
+::ng-deep .dx-popup-title {
+    background: $color-primario !important;
+    color: white !important;
+    text-align: end !important;
+}
+
+::ng-deep .dx-button-mode-text .dx-icon {
+    color: white !important;
+}
+
+::ng-deep .dx-popup-title.dx-toolbar .dx-toolbar-before {
+    text-align: center !important;
+    width: 100% !important;
+}
+
+::ng-deep .dx-loadpanel-wrapper {
+    top: 250px !important;
+}
+
+::ng-deep .dx-widget.dx-button.dx-button-mode-contained.dx-button-normal.dx-button-has-text.dx-button-has-icon {
+    background-color: $color-primario !important;
+    border-color: #ddd;
+    color: white !important;
+}
+
+// .dx-widget.dx-button.dx-button-mode-contained.dx-button-normal.dx-button-has-text.dx-button-has-icon .dx-button-content .dx-icon.dx-icon-xlsxfile {
+//   color: white !important;
+// }
+//

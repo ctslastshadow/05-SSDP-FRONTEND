@@ -3,21 +3,21 @@ import { AlertsService } from 'src/base/alerts.service';
 import { LoaderService } from 'src/base/loader.service';
 
 @Component({
-  selector: 'app-consulta',
-  templateUrl: './consulta.component.html',
-  styleUrls: ['./consulta.component.scss']
+  selector: 'app-consulta-restitucion',
+  templateUrl: './consulta-restitucion.component.html',
+  styleUrls: ['./consulta-restitucion.component.scss']
 })
-export class ConsultaComponent {
+export class ConsultaRestitucionComponent {
   cedula: string = '';
   resultado: any = null;
   displayedColumns: string[] = ['campo1', 'campo2']; 
 
-  constructor(
+ constructor(
     private alerts: AlertsService,
     public loader: LoaderService
   ) {}
 
-  buscarInfoSuspension() {
+    buscarInfoRestitucion  () {
     if (!this.validarCedulaEcuatoriana(this.cedula)) { 
       this.alerts.alertMessage('Error', 'Ingrese una cédula válida de 10 dígitos.', 'error');
       return;
@@ -62,5 +62,4 @@ export class ConsultaComponent {
     const digitoVerificador = (10 - (suma % 10)) % 10;
     return digitoVerificador === digitos[9];
   }
-
 }

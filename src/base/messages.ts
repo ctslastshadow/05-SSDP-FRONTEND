@@ -1,0 +1,55 @@
+import { SweetAlertIcon } from "sweetalert2";
+export const isWarning: SweetAlertIcon = 'warning';
+export const isSuccess: SweetAlertIcon = 'success';
+export const isError: SweetAlertIcon = 'error';
+export const isInfo: SweetAlertIcon = 'info';
+let date: Date = new Date();
+export const messages = {
+  required: 'El campo es obligatorio',
+  sentenciaDuplicated: 'La sentencia ya existe',
+  checkNotSelected: 'Seleccione la opción de registro',
+  requiredDocument: 'El documento es obligatorio',
+  dateOutLimit: 'Fecha fuera de rango',
+  twoDecimal: 'El valor debe tener máximo dos decimales',
+  twoDecimalMayorCero: 'El valor debe ser mayor a 0',
+  phoneCharacter: 'Debe contener mínimo 9 caracteres incluyendo el código provincial',
+  min10Character: 'Debe contener mínimo 10 caracteres',
+  min3CharacterCed: 'Debe contener al menos 3 dígitos',
+  min10CharacterCed: 'Debe contener al menos 10 dígitos',
+  min13CharacterCed: 'Debe contener al menos 13 dígitos',
+  min1013Character: 'Debe contener 10 o 13 caracteres',
+  min13Character: 'Debe contener mínimo 13 caracteres',
+  max500Character: 'Debe contener máximo 500 caracteres',
+  max100Character: 'Debe contener máximo 100 caracteres',
+  max20Character: 'Debe contener máximo 20 caracteres',
+  max10Character: 'Debe contener máximo 10 caracteres',
+  max6Character: 'Debe contener máximo 6 caracteres',
+  max250Character: 'Debe contener máximo 250 caracteres',
+  max200Character: 'Debe contener máximo 200 caracteres',
+  dniValid: "Ingrese una cédula o ruc válido",
+  camposVacios: "Revisar campos con observación",
+  cedulaSinSentencias: "La cédula ingresada no se encuentra en el servicio provisto a través de la DINARP para la consulta de sentencias en el Consejo de la Judicatura y Tribunal Contencioso Electoral",
+  cedulaInvalida: "La cédula ingresada es incorrecta; por favor, ingrese una cédula válida",
+  advertenciaTitle: "¡Advertencia!",
+  informacionTitle: "¡Información!",
+  onlyOneSupportFile: "Solo puede agregar un documento de soporte",
+  selectOneAddFile: "Debe seleccionar un documento para poder agregarlo",
+  TypeFilenNotAllowed: "Tipo de archivo no está permitido",
+  exceed5MBFile: "Tamaño supera los 5MB",
+  confirmCancelSentencia: "¿Está seguro de cancelar el registro de la sentencia?",
+  isWarning: isWarning,
+  isSuccess: isSuccess,
+  isError: isError,
+  isInfo: isInfo,
+  exitoTitle: "¡Éxito!",
+  confirmacionTitle: "Confirmación",
+  documentosRespaldosVacios: "Cargue el documento de respaldo",
+  confirmSave: "¿Está seguro de guardar la información?",
+  sentenciaSaved: "Sentencia guardada correctamente!",
+  sentenciaNotSaved: "Error al guardar la sentencia",
+  saveSuspension: "¿Está seguro de registrar al ciudadano ",
+  saveSuspensionEnd: "“ para suspender los derechos políticos?",
+  saveRestitucion: "¿Está seguro de registrar al ciudadano ",
+  saveRestitucionEnd: "“ para suspender los derechos políticos?"
+
+}

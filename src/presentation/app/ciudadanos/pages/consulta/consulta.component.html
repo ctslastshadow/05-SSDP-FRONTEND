@@ -1,1 +1,26 @@
-<p>consulta works!</p>
+<div *ngIf="loader.status | async" class="loader-overlay">
+  <div class="loader"></div>
+</div>
+
+<div class="busqueda-container" style="padding: 100px; justify-items: center">
+    <dx-text-box [(value)]="cedula" placeholder="Ingrese la cédula" width="300">
+      </dx-text-box>
+  
+    <dx-button text="Buscar"  (onClick)="buscarInfoSuspension()" type="success" icon="search"></dx-button>
+  </div>
+  <div *ngIf="loader.status | async" class="loader-overlay">
+  <div class="loader"></div>
+</div>
+
+    <dx-data-grid
+      *ngIf="resultado"
+      [dataSource]="resultado"
+      [showBorders]="true"
+      [columnAutoWidth]="true"
+      [rowAlternationEnabled]="true"
+      class="tabla-resultado"
+    >
+      <dxi-column dataField="campo1" caption="Campo"></dxi-column>
+      <dxi-column dataField="campo2" caption="Valor"></dxi-column>
+    </dx-data-grid>
+
