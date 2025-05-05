@@ -13,6 +13,13 @@ export class StatusResponseService {
         if (httpErrorResponse.status == 502) {
             return { message: "Lo sentimos, estamos experimentando problemas técnicos temporales. El error 502 Bad Gateway indica dificultades en la conexión. Por favor, recarga la página o inténtalo más tarde.", statusCode: httpErrorResponse.status, ok }
         }
+        if (httpErrorResponse.status == 504) {
+            return { message: "Lo sentimos, estamos experimentando problemas técnicos temporales. El error 504 Bad Gateway indica dificultades en la conexión. Por favor, recarga la página o inténtalo más tarde.", statusCode: httpErrorResponse.status, ok }
+        }
+
+        if (httpErrorResponse.status == 500) {
+            return { message: "Lo sentimos, estamos experimentando problemas técnicos temporales. El error 502 Error Interno del Servidor. Por favor, recarga la página o inténtalo más tarde.", statusCode: httpErrorResponse.status, ok }
+        }
         if (error.StatusCode == 404 || error.StatusCode == 500) {
             responseStatus = { message: error.Message, statusCode: error.StatusCode, ok }
         }

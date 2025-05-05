@@ -12,6 +12,7 @@ import { ICjSentenciaRsViewModel } from 'src/data/consJudicatura/models/consJudi
  */
 
 @Injectable({ providedIn: 'root' })
+
 export class GetCJudicaturaUseCase {
     constructor(private _aCJudicaturaService: ACJudicaturaService) { }
    

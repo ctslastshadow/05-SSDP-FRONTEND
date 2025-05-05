@@ -1,35 +1,51 @@
+@import "~devextreme/dist/css/dx.material.blue.light.css";
 .loader-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.7);
-    z-index: 9999;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .loader {
-    border: 8px solid #f3f3f3; /* Color de fondo del spinner */
-    border-top: 8px solid #3498db; /* Color principal */
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
-    animation: spin 1s linear infinite;
-  }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(255, 255, 255, 0.6); /* Fondo semitransparente */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.loader {
+  border: 8px solid #f3f3f3; /* Color de fondo del spinner */
+  border-top: 8px solid #3498db; /* Color del spinner */
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  animation: spin 1s linear infinite;
+}
+
+.loader-message {
+  margin-top: 16px;
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
   .busqueda-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding: 50px;
+    gap: 30px;
+  }
+
+  .resultado-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     gap: 30px;
   }
   
@@ -42,6 +58,14 @@
     text-align: center;
     font-family: 'Poppins', 'Roboto', 'Segoe UI', sans-serif;
   }
+
+  .titulo-secundario {
+    font-size: 2em;
+    font-weight: bold;
+    color: #2c3e50;
+    text-align: left;
+    font-family: 'Poppins', 'Roboto', 'Segoe UI', sans-serif;
+  }
   
   .formulario-busqueda {
     display: flex;
@@ -52,4 +76,30 @@
   .tabla-resultado {
     width: 80%;
     margin-top: 30px;
+  }
+
+  .texto-error {
+    color: red;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .botones-formulario {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+  }
+
+  .custom-panel-header {
+    background-color: #0d47a1; /* Azul oscuro */
+    color: white;
+    padding: 10px 15px;
+    font-weight: bold;
+    font-size: 16px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
   }

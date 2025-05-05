@@ -1,0 +1,8 @@
+{
+  "/bsdinarp": {
+    "target": "https://backend-apps-test.cne.gob.ec",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  }
+}

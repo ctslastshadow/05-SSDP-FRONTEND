@@ -27,9 +27,21 @@ export interface ICjSentenciaViewModel {
 }
 
 export interface IGetSentenciasRegistroModel {
-    auditoria: string | null;
-    cedula: string | null;
-    sentencia: string | null;
+    auditoria: {
+        usuario: number;
+        proceso: number;
+        ip: string;
+        navegador: string;
+        tipoRequest: string;
+        descripcionRequest: string;
+        servidor: string;
+    };
+    codigoModulo: number;
+    codigoPaquete: number;
+    parameters: {
+        nombre: string;
+        valor: string;
+    }[];
 }
 
 

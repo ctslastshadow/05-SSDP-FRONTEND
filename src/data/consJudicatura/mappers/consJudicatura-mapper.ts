@@ -10,9 +10,6 @@ export class CJudicaturaMapper extends AMapper<any, any> {
     public clientIp: string;
     public clientBrowser: string;
 
-    /**
-     *
-     */
     constructor() {
         super();
         this.clientIp = sessionStorage.getItem('clientIp') || '1.1.1.1';
@@ -20,16 +17,32 @@ export class CJudicaturaMapper extends AMapper<any, any> {
     }
 
     mapGetRegistroTo(param: IGetSentenciasRegistroViewModel): IGetSentenciasRegistroModel {
-        let body = {
-            auditoria: `${uid(25)}|1202|151|${this.clientIp}|${this.clientBrowser}|I|Guardar información de Parametrización|01`,
-            cedula: param.cedula,
-            sentencia: param.sentencia
-        }
-        console.log('body mapper ', body)
-        return body;
+      // Crear el cuerpo completo con todos los campos
+      let body = {
+          auditoria: {
+              usuario: 1,
+              proceso: 500,
+              ip: '192.188.1.1',            
+              navegador: 'CHROME',   
+              tipoRequest: 'C',
+              descripcionRequest: 'Consulta',
+              servidor: 'C'
+          },
+          codigoModulo: 0,
+          codigoPaquete: 5595,
+          parameters: [
+              {
+                  nombre: 'identificacion',
+                  valor: param.cedula ?? '' 
+              }
+          ]
+      };
+  
+      console.log('body mapper ', body); // Revisa el contenido generado
+      return body;
+  }
 
-    }
-
+   
 
     async filesToUint8Arrays(files: IListArchivoViewModel[]): Promise<IArchivoModel[]> {
         const filePromises = files.map(async (file) => await this.fileToUint8Arrayfor(file));
@@ -56,6 +69,4 @@ export class CJudicaturaMapper extends AMapper<any, any> {
             reader.onerror = (error) => reject(error);
         });
     }
-
-    
 }
