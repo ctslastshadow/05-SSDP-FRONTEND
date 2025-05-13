@@ -17,6 +17,9 @@ import { DxPopupModule } from 'devextreme-angular';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+
 @NgModule({
   declarations: [
     ConsultaSuspensionComponent,
@@ -37,6 +40,8 @@ import { FormsModule } from '@angular/forms';
     DxDateBoxModule,
     DxPopupModule,
     DxFileUploaderModule,
+    MatIconModule,   
+    MatButtonModule
     
   ],
   exports: [ConsultaSuspensionComponent  ]

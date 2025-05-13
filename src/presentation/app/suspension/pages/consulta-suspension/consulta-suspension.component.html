@@ -42,13 +42,9 @@
     </dxi-column>
     <dxi-column dataField="fechaSentencia" caption="Fecha Sentencia"></dxi-column>
     <dxi-column dataField="tipoSentencia" caption="Tipo Sentencia"></dxi-column>
-    <dxi-column
-      caption="PDF"
-      cellTemplate="pdfCell"
-    ></dxi-column>
-
+    <dxi-column caption="PDF" cellTemplate="pdfCell"></dxi-column>
     <div *dxTemplate="let data of 'pdfCell'">
-      <dx-button (click)="abrirModalPDF(data.data.base64PDF)" type="default" icon="file">
+      <dx-button (click)="abrirModalPDF(data.data.documentoBase64)" type="default" icon="file">
       </dx-button>
     </div>
   </dx-data-grid>
@@ -99,7 +95,7 @@
   [width]="800"
   [height]="'auto'"
   [dragEnabled]="true"
-  [closeOnOutsideClick]="true"
+  [hideOnOutsideClick]="true"
 >
   <div class="p-4">
     <form #formManual="ngForm">
@@ -188,3 +184,19 @@
     </form>
   </div>
 </dx-popup>
+
+<dx-popup
+  [(visible)]="mostrarPdfPopup"
+  [showTitle]="true"
+  title="Documento PDF"
+  [width]="1100"
+  [height]="700"
+  [dragEnabled]="true"
+  [hideOnOutsideClick]="true"
+>
+  <div class="p-4" style="height: 100%;">
+    <iframe *ngIf="base64PDF" [src]="base64PDF" width="100%" height="600px"></iframe>
+  </div>
+</dx-popup>
+
+

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewContainerRef } from '@angular/core';
 import { AlertsService } from 'src/base/alerts.service';
 import { LoaderService } from 'src/base/loader.service';
 
@@ -6,7 +6,7 @@ import { IGetSentenciasRegistroViewModel } from 'src/domain/consJudicatura/viewM
 import { GetCJudicaturaUseCase } from 'src/domain/consJudicatura/useCases/get-consJudicatura.useCase';
 import { MatDialog } from '@angular/material/dialog';
 import { VerPdfModalComponent } from '../ver-pdf-modal/ver-pdf-modal.component';
-
+import { DomSanitizer, SafeResourceUrl  } from '@angular/platform-browser';
 @Component({
   selector: 'app-consulta-suspension',
   templateUrl: './consulta-suspension.component.html',
@@ -59,11 +59,15 @@ export class ConsultaSuspensionComponent implements OnInit {
   public mostrarMensajeTCE: boolean = false;
   public mensajeTCE: string = '';
   esErrorTCE: boolean = false;
-
+  mostrarPdfPopup: boolean = false;
+  base64PDF: SafeResourceUrl | null = null;
+///////////////////////////////////////////////////////////////CONSTRUCTOR///////////////////////////////////////////////////
   constructor(
     private alerts: AlertsService,
     public loader: LoaderService,
     private dialog: MatDialog,
+    private sanitizer: DomSanitizer,
+    private viewContainerRef: ViewContainerRef,
     private _getCJudicaturaUseCase: GetCJudicaturaUseCase
   ) {}
 
@@ -78,10 +82,11 @@ export class ConsultaSuspensionComponent implements OnInit {
       return;
     }
   
-    this.loader.display(true); // Mostrar loader
+    this.loader.display(true); // Mostrar loadeAr
   
     try {
       await this.getCJSentenciasCedula(); // Esperar hasta que termine la llamada al API
+      console.log('databyteJudicatura',this.dataJudicatura);
       await this.getTCESentenciasCedula(); // Esperar hasta que termine la llamada al API
       this.alerts.alertMessage('Búsqueda Exitosa', 'Consultas Realizadas.', 'success');
     } catch (error) {
@@ -96,7 +101,13 @@ export class ConsultaSuspensionComponent implements OnInit {
   ////////////////////////////////////////////////////////////CONSEJO DE LA JUDICATURA////////////////////////////////////////////////////
   public async getCJSentenciasCedula(): Promise<void> {
     let body: IGetSentenciasRegistroViewModel = {
-      cedula: this.cedula
+      cedula: this.cedula,
+      usuario: '8642',
+      proceso: '500',
+      ip: '192.188.1.1',
+      navegador: 'Chrome',
+      servidor: 'N0',
+      modulo: '500'
     };
   
     try {
@@ -157,7 +168,13 @@ export class ConsultaSuspensionComponent implements OnInit {
 ////////////////////////////////////////////////////////////TRIBUNAL CONTENSIOSO ELECTORAL TCE ////////////////////////////////////////////////////
   public async getTCESentenciasCedula(): Promise<void> {
     let body: IGetSentenciasRegistroViewModel = {
-      cedula: this.cedula
+      cedula: this.cedula,
+      usuario: '8642',
+      proceso: '500',
+      ip: '192.188.1.1',
+      navegador: 'Chrome',
+      servidor: 'N0',
+      modulo: '500'
     };
   
     try {
@@ -289,11 +306,9 @@ export class ConsultaSuspensionComponent implements OnInit {
   }
 
   abrirModalPDF(base64: string) {
-    this.dialog.open(VerPdfModalComponent, {
-      data: { base64 },
-      width: '80vw',
-      height: '80vh'
-    });
+    const pdfUrl = 'data:application/pdf;base64,' + base64;
+    this.base64PDF = this.sanitizer.bypassSecurityTrustResourceUrl(pdfUrl);
+    this.mostrarPdfPopup = true;
   }
 
 }

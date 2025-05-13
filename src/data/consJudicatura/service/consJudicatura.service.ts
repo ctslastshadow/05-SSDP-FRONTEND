@@ -21,7 +21,8 @@ export class CJudicaturaService extends ACJudicaturaService {
 
     public getCJSentenciasCedula(body: IGetSentenciasRegistroViewModel): Observable<ICjSentenciaRsViewModel> {
      
-        const url = `${this.url}ConsejoJudicaturaSentencias`;
+        const url = `${this.url}consultarSentenciaCJ`;
+        console.log('URL consultarSentenciaCJ  :', url); //
         console.log('🔎 BODY que se enviará:', body); // Muestra todo el objeto estructurado
         return this._http.post<any>(url, this._mapper.mapGetRegistroTo(body)).pipe(
         

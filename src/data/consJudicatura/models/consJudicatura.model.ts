@@ -1,4 +1,3 @@
-import { IListArchivoViewModel } from "src/domain/general/i-list-archivo.viewModel";
 import { IResponseStatusViewModel } from "src/domain/general/i-response-status.viewModel";
 
 export interface ICjSentenciaRsViewModel extends IResponseStatusViewModel {
@@ -27,22 +26,15 @@ export interface ICjSentenciaViewModel {
 }
 
 export interface IGetSentenciasRegistroModel {
-    auditoria: {
-        usuario: number;
-        proceso: number;
+        cedula: string;
+        usuario: string;
+        proceso: string;
         ip: string;
         navegador: string;
-        tipoRequest: string;
-        descripcionRequest: string;
         servidor: string;
-    };
-    codigoModulo: number;
-    codigoPaquete: number;
-    parameters: {
-        nombre: string;
-        valor: string;
-    }[];
-}
+        modulo: string;
+      }
+
 
 
 

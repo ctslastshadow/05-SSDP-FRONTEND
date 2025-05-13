@@ -19,23 +19,14 @@ export class CJudicaturaMapper extends AMapper<any, any> {
     mapGetRegistroTo(param: IGetSentenciasRegistroViewModel): IGetSentenciasRegistroModel {
       // Crear el cuerpo completo con todos los campos
       let body = {
-          auditoria: {
-              usuario: 1,
-              proceso: 500,
-              ip: '192.188.1.1',            
-              navegador: 'CHROME',   
-              tipoRequest: 'C',
-              descripcionRequest: 'Consulta',
-              servidor: 'C'
-          },
-          codigoModulo: 0,
-          codigoPaquete: 5595,
-          parameters: [
-              {
-                  nombre: 'identificacion',
-                  valor: param.cedula ?? '' 
-              }
-          ]
+         cedula: param.cedula ?? '' ,
+         usuario: param.usuario ?? '' ,
+         proceso: param.proceso ?? '' ,
+         ip: this.clientIp ?? '' ,
+         navegador: this.clientBrowser ?? '' ,
+         servidor: param.servidor ?? '' ,
+         modulo: param.modulo ?? '' 
+              
       };
   
       console.log('body mapper ', body); // Revisa el contenido generado

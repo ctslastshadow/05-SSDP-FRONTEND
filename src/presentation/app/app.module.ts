@@ -11,6 +11,13 @@ import { CJudicaturaService } from 'src/data/consJudicatura/service/consJudicatu
 import { HttpClientModule } from '@angular/common/http';
 import { CJudicaturaMapper } from 'src/data/consJudicatura/mappers/consJudicatura-mapper';
 import { DataModule } from 'src/data/data.module';
+import { SuspensionModule } from 'src/presentation/app/suspension/suspension.module';
+
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @NgModule({
@@ -24,7 +31,12 @@ import { DataModule } from 'src/data/data.module';
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    DataModule
+    DataModule,
+    BrowserAnimationsModule, 
+    MatDialogModule,
+    MatIconModule,
+    MatButtonModule,
+    SuspensionModule
   ],
   providers: [
    

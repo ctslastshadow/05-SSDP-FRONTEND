@@ -1,5 +1,5 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://localhost:4201/',
-    apiUrlDinarp: 'https://backend-apps-test.cne.gob.ec/bsdinarp/api/BsDinarp/'
+    apiUrlSSDP: 'https://backend-apps-desa.cne.gob.ec/suspension/api/',
+    apiUrlDinarp: 'https://desa-app01.cne.gob.ec/00-SSCNE-WS/BusDinarpSSCNE/'
 };
