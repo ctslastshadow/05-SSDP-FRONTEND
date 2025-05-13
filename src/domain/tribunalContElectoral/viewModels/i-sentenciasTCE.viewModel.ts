@@ -1,4 +1,4 @@
-export interface IGetSentenciasRegistroViewModel {
+export interface IGetSentenciasTCERegistroViewModel {
     cedula: string ;
     usuario: string;
     proceso: string;

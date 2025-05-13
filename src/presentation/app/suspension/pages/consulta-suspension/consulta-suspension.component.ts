@@ -4,9 +4,10 @@ import { LoaderService } from 'src/base/loader.service';
 
 import { IGetSentenciasRegistroViewModel } from 'src/domain/consJudicatura/viewModels/i-sentencias.viewModel';
 import { GetCJudicaturaUseCase } from 'src/domain/consJudicatura/useCases/get-consJudicatura.useCase';
+import { GetTribunalContElectoralUseCase } from 'src/domain/tribunalContElectoral/useCases/get-tribunalContElectoral.useCase';
 import { MatDialog } from '@angular/material/dialog';
-import { VerPdfModalComponent } from '../ver-pdf-modal/ver-pdf-modal.component';
 import { DomSanitizer, SafeResourceUrl  } from '@angular/platform-browser';
+import { IGetSentenciasTCERegistroViewModel } from 'src/domain/tribunalContElectoral/viewModels/i-sentenciasTCE.viewModel';
 @Component({
   selector: 'app-consulta-suspension',
   templateUrl: './consulta-suspension.component.html',
@@ -65,10 +66,9 @@ export class ConsultaSuspensionComponent implements OnInit {
   constructor(
     private alerts: AlertsService,
     public loader: LoaderService,
-    private dialog: MatDialog,
     private sanitizer: DomSanitizer,
-    private viewContainerRef: ViewContainerRef,
-    private _getCJudicaturaUseCase: GetCJudicaturaUseCase
+    private _getCJudicaturaUseCase: GetCJudicaturaUseCase,
+    private _getTContElectoralUseCase: GetTribunalContElectoralUseCase
   ) {}
 
   ngOnInit() {
@@ -78,7 +78,7 @@ export class ConsultaSuspensionComponent implements OnInit {
 
   async buscarInfoSuspension() {
     if (!this.validarCedulaEcuatoriana(this.cedula)) { 
-      this.alerts.alertMessage('Error', 'Ingrese una cédula válida de 10 dígitos.', 'error');
+      this.alerts.alertMessage('Error', 'Favor ingresar una cédula válida.', 'error');
       return;
     }
   
@@ -167,7 +167,7 @@ export class ConsultaSuspensionComponent implements OnInit {
 
 ////////////////////////////////////////////////////////////TRIBUNAL CONTENSIOSO ELECTORAL TCE ////////////////////////////////////////////////////
   public async getTCESentenciasCedula(): Promise<void> {
-    let body: IGetSentenciasRegistroViewModel = {
+    let body: IGetSentenciasTCERegistroViewModel = {
       cedula: this.cedula,
       usuario: '8642',
       proceso: '500',
@@ -178,7 +178,7 @@ export class ConsultaSuspensionComponent implements OnInit {
     };
   
     try {
-      const resultTCE: any = await this._getCJudicaturaUseCase.getCJSentenciasCedula(body).toPromise();
+      const resultTCE: any = await this._getTContElectoralUseCase.getTCESentenciasCedula(body).toPromise();
       console.log('respuesta completa TCE', resultTCE);
   
       // Buscar la respuesta de 'tieneSentencias'
@@ -211,7 +211,7 @@ export class ConsultaSuspensionComponent implements OnInit {
       else if (tieneSentenciasTCE === 'NO') {
         this.esErrorTCE = false;
         this.mostrarMensajeTCE = true;
-        this.mensajeTCE = 'El ciudadano no posee sentencias registradas.';
+        this.mensajeTCE = 'El ciudadano no posee sentencias registradas en el TCE.';
         
         this.mostrarTablaTCE = false;
       } 
