@@ -13,6 +13,9 @@ export class AlertsService {
       icon: icono,
       confirmButtonColor: '#3085d6',
       confirmButtonText: 'Aceptar',
+      customClass: {
+        title: 'swal-title-small'
+      }
     })
   }
 

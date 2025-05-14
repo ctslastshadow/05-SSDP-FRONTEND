@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
+import { DxNumberBoxModule } from 'devextreme-angular/ui/number-box';
 import { HttpClientModule } from '@angular/common/http';
 import { DataModule } from 'src/data/data.module';
 import { SuspensionModule } from 'src/presentation/app/suspension/suspension.module';
@@ -24,6 +25,7 @@ import { MatButtonModule } from '@angular/material/button';
     DxTextBoxModule,
     DxButtonModule,
     DxDataGridModule,
+    DxNumberBoxModule,
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,

@@ -6,6 +6,7 @@ import { ConsultaSuspensionComponent } from './pages/consulta-suspension/consult
 // DevExtreme
 import { DxTextBoxModule } from 'devextreme-angular/ui/text-box';
 import { DxButtonModule } from 'devextreme-angular/ui/button';
+import { DxNumberBoxModule } from 'devextreme-angular/ui/number-box';
 import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { DxValidatorModule } from 'devextreme-angular/ui/validator';
 import { DxValidationGroupModule } from 'devextreme-angular/ui/validation-group';
@@ -33,6 +34,7 @@ import { MatButtonModule } from '@angular/material/button';
     DxTextBoxModule,
     DxButtonModule,
     DxDataGridModule,
+    DxNumberBoxModule,
     DxValidatorModule,
     DxValidationGroupModule,
     MatDialogModule,

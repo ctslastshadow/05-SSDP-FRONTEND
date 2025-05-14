@@ -18,8 +18,8 @@
   Consejo de la Judicatura (SENTENCIAS)
 </p>
 
-<div class="resultado-container">
-  <p *ngIf="mostrarMensajeCJ"
+<div class="resultado-container" style="font-size: medium;">
+  <p *ngIf="mostrarMensajeCJ" 
      [ngClass]="{ 'texto-error': esErrorCJ, 'texto-exito': !esErrorCJ }"
      style="padding-left: 30px;">
     {{ mensajeCJ }}
@@ -47,6 +47,21 @@
       <dx-button (click)="abrirModalPDF(data.data.documentoBase64)" type="default" icon="file">
       </dx-button>
     </div>
+
+    <dxi-column
+  caption="INGRESAR"
+  [width]="100"
+  cellTemplate="ingresarCell">
+</dxi-column>
+
+<div *dxTemplate="let data of 'ingresarCell'">
+  <dx-button
+    icon="plus"
+    type="success"
+    stylingMode="contained"
+    (onClick)="ingresarSentenciaCJ(data.data)">
+  </dx-button>
+</div>
   </dx-data-grid>
 </div>
 
@@ -55,8 +70,8 @@
   Tribunal Contencioso Electoral (SENTENCIAS)
 </p>
 
-<div class="resultado-container">
-  <p *ngIf="mostrarMensajeTCE"
+<div class="resultado-container" style="font-size: medium;" >
+  <p *ngIf="mostrarMensajeTCE" 
      [ngClass]="{ 'texto-error': esErrorTCE, 'texto-exito': !esErrorTCE }"
      style="padding-left: 30px;">
     {{ mensajeTCE }}
@@ -100,12 +115,13 @@
   <div class="p-4">
     <form #formManual="ngForm">
       <div class="form-grid">
+
         <!-- Primera fila -->
         <div>
           <label>Institución:</label>
           <dx-select-box
             [(value)]="sentenciaManual.institucion"
-            [readOnly]="false"
+            [readOnly]="!esIngresoManual"
             [items]="instituciones"
             displayExpr="name"
             valueExpr="id">
@@ -115,71 +131,79 @@
           <label>Cédula:</label>
           <dx-text-box [(value)]="sentenciaManual.cedula" placeholder="Cédula"></dx-text-box>
         </div>
-        <div>
-          <label>Nombres y Apellidos:</label>
-          <dx-text-box [(value)]="sentenciaManual.nombre" placeholder="Nombres y Apellidos"></dx-text-box>
-        </div>
 
         <!-- Segunda fila -->
         <div>
-          <label>Nro. Sentencia:</label>
-          <dx-text-box [(value)]="sentenciaManual.numeroSentencia" placeholder="Nro. Sentencia/Proceso/Causa"></dx-text-box>
+          <label>Nombres y Apellidos:</label>
+          <dx-text-box [(value)]="sentenciaManual.nombre" placeholder="Nombres"></dx-text-box>
         </div>
+        
         <div>
-          <label>Tipo de Acción:</label>
-          <dx-text-box [(value)]="sentenciaManual.tipoAccion" placeholder="Tipo de Acción"></dx-text-box>
+          <label>Nro. Sentencia:</label>
+          <dx-text-box [(value)]="sentenciaManual.numeroSentencia" placeholder="Nro. Sentencia"></dx-text-box>
         </div>
 
         <!-- Tercera fila -->
         <div>
-          <label>Fecha de Ingreso:</label>
-          <dx-date-box [(value)]="sentenciaManual.fechaIngreso" displayFormat="dd/MM/yyyy"></dx-date-box>
+          <label>Duración (número):</label>
+          <dx-number-box [(value)]="sentenciaManual.duracion" 
+          (onValueChanged)="actualizarFechaFin()"></dx-number-box>
+          
         </div>
+
         <div>
-          <label>Tipo de Razón:</label>
-          <dx-text-box [(value)]="sentenciaManual.tipoRazon" placeholder="Tipo de Razón"></dx-text-box>
+          <label>Tipo de Duración:</label>
+          <dx-select-box
+            [(value)]="sentenciaManual.codigoDuracion"
+            [items]="codDuracion"
+            displayExpr="name"
+            valueExpr="id"
+            (onValueChanged)="actualizarFechaFin()">
+          </dx-select-box>
         </div>
 
         <!-- Cuarta fila -->
         <div>
-          <label>Fecha de Razón:</label>
-          <dx-date-box [(value)]="sentenciaManual.fechaRazon" displayFormat="dd/MM/yyyy"></dx-date-box>
+          <label>Inicio de Sentencia:</label>
+          <dx-date-box [(value)]="sentenciaManual.fechaInicio" displayFormat="dd/MM/yyyy"
+          (onValueChanged)="actualizarFechaFin()"></dx-date-box>
         </div>
         <div>
-          <label>Tipo de Sentencia:</label>
-          <dx-text-box [(value)]="sentenciaManual.tipoSentencia" placeholder="Tipo de Sentencia"></dx-text-box>
+          <label>Fin de Sentencia:</label>
+          <dx-date-box [(value)]="sentenciaManual.fechaFin" displayFormat="dd/MM/yyyy" [readOnly]="true"></dx-date-box>
         </div>
 
-        <!-- Quinta fila -->
-        <div>
-          <label>Fecha de Sentencia:</label>
-          <dx-date-box [(value)]="sentenciaManual.fechaSentencia" displayFormat="dd/MM/yyyy"></dx-date-box>
-        </div>
-        <div>
-          <label>Unidad Judicial:</label>
-          <dx-text-box [(value)]="sentenciaManual.unidadJudicial" placeholder="Unidad Judicial"></dx-text-box>
-        </div>
+    <!-- Quinta fila (centrado) -->
+<div class="col-span-2">
+  <label style="display: block; text-align: center;">Documento de Sentencia:</label>
 
-        <!-- Subir PDF -->
-        <div class="col-span-2">
-          <label>Subir Documento de Sentencia (PDF):</label>
-          <dx-file-uploader
-            accept=".pdf"
-            [multiple]="false"
-            [uploadMode]="'useForm'"
-            [showFileList]="true"
-            (onValueChanged)="onArchivoSeleccionado($event)">
-          </dx-file-uploader>
-        </div>
+  <ng-container *ngIf="esIngresoManual; else archivoCargado">
+    <div style="display: flex; justify-content: center; ">
+      <dx-file-uploader
+        #uploaderRef
+        accept=".pdf"
+        [multiple]="false"
+        [uploadMode]="'useForm'"
+        [showFileList]="true"
+        (onValueChanged)="onArchivoSeleccionado($event)">
+      </dx-file-uploader>
+    </div>
+  </ng-container>
 
-        <!-- Botones -->
-       
+  <ng-template #archivoCargado>
+    <p style="color: green; font-weight: bold; text-align: center; margin-top: 10px;">
+      Documento de Sentencia Cargado
+    </p>
+  </ng-template>
+</div>
+
       </div>
-      <div class="botones-formulario">
-        <dx-button text="Guardar" type="success" (onClick)="guardarManual()"  icon="save"></dx-button>
-        <dx-button text="Limpiar" type="default" (onClick)="limpiarManual()"  icon="refresh"></dx-button>
-        <dx-button text="Cancelar" type="danger" (onClick)="cancelarManual()"  icon="close"></dx-button>
-        
+
+      <!-- Botones -->
+      <div class="botones-formulario mt-4 text-center">
+        <dx-button text="Guardar" type="success" (onClick)="ingresarSentenciaFinal()" icon="save"></dx-button>
+        <dx-button text="Limpiar" type="default" (onClick)="limpiarFormIngreso()" icon="refresh"></dx-button>
+        <dx-button text="Cancelar" type="danger" (onClick)="cancelarFormIngreso()" icon="close"></dx-button>
       </div>
     </form>
   </div>

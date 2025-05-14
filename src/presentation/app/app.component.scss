@@ -58,3 +58,8 @@
     padding: 3px 0;
     /* Añade un espacio alrededor del contenido del pie de página */
 }
+
+::ng-deep .swal2-title {
+    font-size: 1.8rem !important; 
+    font-weight: 400 !important; ;
+  }

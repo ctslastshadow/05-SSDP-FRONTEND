@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewContainerRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { AlertsService } from 'src/base/alerts.service';
 import { LoaderService } from 'src/base/loader.service';
+import { DxFileUploaderComponent } from 'devextreme-angular';
 
 import { IGetSentenciasRegistroViewModel } from 'src/domain/consJudicatura/viewModels/i-sentencias.viewModel';
 import { GetCJudicaturaUseCase } from 'src/domain/consJudicatura/useCases/get-consJudicatura.useCase';
@@ -8,6 +9,7 @@ import { GetTribunalContElectoralUseCase } from 'src/domain/tribunalContElectora
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeResourceUrl  } from '@angular/platform-browser';
 import { IGetSentenciasTCERegistroViewModel } from 'src/domain/tribunalContElectoral/viewModels/i-sentenciasTCE.viewModel';
+
 @Component({
   selector: 'app-consulta-suspension',
   templateUrl: './consulta-suspension.component.html',
@@ -15,24 +17,22 @@ import { IGetSentenciasTCERegistroViewModel } from 'src/domain/tribunalContElect
 })
 
 export class ConsultaSuspensionComponent implements OnInit {
+  @ViewChild('uploaderRef', { static: false }) uploaderComponent!: DxFileUploaderComponent;
   cedula: string = '';
-
+  
   // Control del modal
   mostrarFormularioManual: boolean = false;
-
+  esIngresoManual: boolean = true;
   // Modelo del formulario
   sentenciaManual = {
     institucion: '' as string | number, // Inicializamos como null, se actualizará en ngOnInit
     cedula: '',
     nombre: '',
     numeroSentencia: '',
-    tipoAccion: '',
-    fechaIngreso: '' as string | number | Date,
-    tipoRazon: '',
-    fechaRazon: '' as string | number | Date,
-    tipoSentencia: '',
-    fechaSentencia: '' as string | number | Date,
-    unidadJudicial: '',
+    duracion: 0 as  number,
+    codigoDuracion:'' as string | number,
+    fechaInicio: '' as string | number | Date,
+    fechaFin: '' as string | number | Date,
     pdf: null
   };
 
@@ -43,6 +43,12 @@ export class ConsultaSuspensionComponent implements OnInit {
   instituciones = [
     { id: 1, name: 'Consejo de la Judicatura' },
     { id: 2, name: 'Tribunal Contencioso Electoral' }
+  ];
+
+  codDuracion = [
+    { id: 1, name: 'Años' },
+    { id: 2, name: 'Meses' },
+    { id: 3, name: 'Días' }
   ];
 
   // DataSet
@@ -72,8 +78,9 @@ export class ConsultaSuspensionComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Establecer el valor por defecto para 'institucion' al cargar el componente
-    this.sentenciaManual.institucion = this.instituciones[0].id; // "Consejo de la Judicatura"
+    // Establecer el valor por defecto al cargar el componente
+    this.sentenciaManual.institucion = this.instituciones[0].id; // Precargar "Consejo de la Judicatura"
+    this.sentenciaManual.codigoDuracion = this.codDuracion[0].id; // Años
   }
 
   async buscarInfoSuspension() {
@@ -165,6 +172,26 @@ export class ConsultaSuspensionComponent implements OnInit {
     }
   }
 
+  ingresarSentenciaCJ(data: any) {
+    this.limpiarFormIngreso();
+    this.esIngresoManual = false;
+    this.sentenciaManual = {
+      institucion: 1, // Consejo de la Judicatura
+      cedula: this.cedula,
+      nombre: data.nombreProcesado || '',
+      numeroSentencia: data.numeroProceso || '',
+      duracion:0,
+      codigoDuracion : this.codDuracion[0].id, // Años
+      fechaInicio: data.fechaSentencia ? new Date(data.fechaSentencia) : '',
+      fechaFin: new Date(), 
+      pdf: null
+    };
+  
+    this.mostrarFormularioManual = true;
+  
+    
+  }
+
 ////////////////////////////////////////////////////////////TRIBUNAL CONTENSIOSO ELECTORAL TCE ////////////////////////////////////////////////////
   public async getTCESentenciasCedula(): Promise<void> {
     let body: IGetSentenciasTCERegistroViewModel = {
@@ -233,29 +260,29 @@ export class ConsultaSuspensionComponent implements OnInit {
   ////////////////////////////////////////////////////////////////INGRESO MANUAL /////////////////////////////////////////////////////
  
   async buscarInfoIngresoManual() {
+    this.limpiarFormIngreso();
+    this.esIngresoManual = true;
     this.mostrarFormularioManual = true;
   }
 
     // Cancelar y cerrar modal
-    cancelarManual() {
+    cancelarFormIngreso() {
       this.mostrarFormularioManual = false;
     }
   
       // Limpiar los campos del formulario
-  limpiarManual() {
+  limpiarFormIngreso() {
     this.sentenciaManual.pdf = null;  // Limpiar el archivo PDF cargado
-    this.sentenciaArchivo = null; // Limpiar la referencia al archivo seleccionado
-    // Resetear otros campos si es necesario
+    this.sentenciaArchivo = null; 
     this.sentenciaManual.cedula = '';
     this.sentenciaManual.nombre = '';
     this.sentenciaManual.numeroSentencia = '';
-    this.sentenciaManual.tipoAccion = '';
-    this.sentenciaManual.fechaIngreso = '';
-    this.sentenciaManual.tipoRazon = '';
-    this.sentenciaManual.fechaRazon = '';
-    this.sentenciaManual.tipoSentencia = '';
-    this.sentenciaManual.fechaSentencia = '';
-    this.sentenciaManual.unidadJudicial = '';
+    this.sentenciaManual.fechaInicio = '';
+    this.sentenciaManual.fechaFin = '';
+    this.sentenciaManual.duracion = 0;
+    if (this.uploaderComponent) {
+      this.uploaderComponent.instance.reset();
+    }
   }
 
    // Guardar los datos ingresados
@@ -273,7 +300,7 @@ export class ConsultaSuspensionComponent implements OnInit {
 
     alert('Sentencia guardada correctamente');
     this.mostrarFormularioManual = false;
-    this.limpiarManual();
+    this.limpiarFormIngreso();
   }
 
   onArchivoSeleccionado(e: any): void {
@@ -309,6 +336,49 @@ export class ConsultaSuspensionComponent implements OnInit {
     const pdfUrl = 'data:application/pdf;base64,' + base64;
     this.base64PDF = this.sanitizer.bypassSecurityTrustResourceUrl(pdfUrl);
     this.mostrarPdfPopup = true;
+  }
+
+  actualizarFechaFin(): void {
+    const inicio = new Date(this.sentenciaManual.fechaInicio);
+    const duracion = Number(this.sentenciaManual.duracion);
+    const tipo = Number(this.sentenciaManual.codigoDuracion);
+  
+    if (!inicio || !duracion || !tipo) {
+      this.sentenciaManual.fechaFin = '';
+      return;
+    }
+  
+    const fin = new Date(inicio);
+  
+    switch (tipo) {
+      case 3: // Días
+        fin.setDate(fin.getDate() + duracion);
+        break;
+      case 2: // Meses
+        fin.setMonth(fin.getMonth() + duracion);
+        break;
+      case 1: // Años
+        fin.setFullYear(fin.getFullYear() + duracion);
+        break;
+      default:
+        break;
+    }
+  
+    this.sentenciaManual.fechaFin = fin;
+  }
+  ingresarSentenciaFinal() {
+
+    this.mostrarFormularioManual = false;
+    this.alerts.alertConfirm(
+      '¿Está seguro?',
+      'Esta acción ingresará la Suspensión de Derechos Políticos.',
+      () => {
+        this.alerts.alertMessage('Exito', 'Suspensión Ingresada Correctamente.', 'success');
+      },
+      () => {
+        this.mostrarFormularioManual = false;
+      }
+    );
   }
 
 }
