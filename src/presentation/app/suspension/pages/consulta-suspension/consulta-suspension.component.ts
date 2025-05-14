@@ -5,10 +5,18 @@ import { DxFileUploaderComponent } from 'devextreme-angular';
 
 import { IGetSentenciasRegistroViewModel } from 'src/domain/consJudicatura/viewModels/i-sentencias.viewModel';
 import { GetCJudicaturaUseCase } from 'src/domain/consJudicatura/useCases/get-consJudicatura.useCase';
+
+import { IGetExistenciaSuspensionViewModel } from 'src/domain/suspension/viewModels/i-suspension.viewModel';
+import { GetExistenciaSuspensionUseCase } from 'src/domain/suspension/useCases/get-existenciaSuspension.useCase';
+
+import { IGetInsertarSuspensionViewModel } from 'src/domain/suspension/viewModels/i-suspension.viewModel';
+import {  GetInsertarSuspensionUseCase } from 'src/domain/suspension/useCases/get-insertarSuspension.useCase';
+
 import { GetTribunalContElectoralUseCase } from 'src/domain/tribunalContElectoral/useCases/get-tribunalContElectoral.useCase';
-import { MatDialog } from '@angular/material/dialog';
+
 import { DomSanitizer, SafeResourceUrl  } from '@angular/platform-browser';
 import { IGetSentenciasTCERegistroViewModel } from 'src/domain/tribunalContElectoral/viewModels/i-sentenciasTCE.viewModel';
+import { ARepositoryService } from 'src/domain/archivos_sentencia/services/a-archivos_sentencia-service';
 
 @Component({
   selector: 'app-consulta-suspension',
@@ -24,7 +32,7 @@ export class ConsultaSuspensionComponent implements OnInit {
   mostrarFormularioManual: boolean = false;
   esIngresoManual: boolean = true;
   // Modelo del formulario
-  sentenciaManual = {
+  sentenciaINGRESO = {
     institucion: '' as string | number, // Inicializamos como null, se actualizará en ngOnInit
     cedula: '',
     nombre: '',
@@ -33,7 +41,7 @@ export class ConsultaSuspensionComponent implements OnInit {
     codigoDuracion:'' as string | number,
     fechaInicio: '' as string | number | Date,
     fechaFin: '' as string | number | Date,
-    pdf: null
+    pdf: '' as string ,
   };
 
   // Archivo
@@ -71,16 +79,20 @@ export class ConsultaSuspensionComponent implements OnInit {
 ///////////////////////////////////////////////////////////////CONSTRUCTOR///////////////////////////////////////////////////
   constructor(
     private alerts: AlertsService,
-    public loader: LoaderService,
+    public loaderMain: LoaderService,
+    public loaderDinarp: LoaderService,
     private sanitizer: DomSanitizer,
     private _getCJudicaturaUseCase: GetCJudicaturaUseCase,
-    private _getTContElectoralUseCase: GetTribunalContElectoralUseCase
+    private _getTContElectoralUseCase: GetTribunalContElectoralUseCase,
+    private _getExistenciaSuspensionUseCase: GetExistenciaSuspensionUseCase,
+     private _getInsertarSuspensionUseCase: GetInsertarSuspensionUseCase,
+    private repositoryService: ARepositoryService,
   ) {}
 
   ngOnInit() {
     // Establecer el valor por defecto al cargar el componente
-    this.sentenciaManual.institucion = this.instituciones[0].id; // Precargar "Consejo de la Judicatura"
-    this.sentenciaManual.codigoDuracion = this.codDuracion[0].id; // Años
+    this.sentenciaINGRESO.institucion = this.instituciones[0].id; // Precargar "Consejo de la Judicatura"
+    this.sentenciaINGRESO.codigoDuracion = this.codDuracion[0].id; // Años
   }
 
   async buscarInfoSuspension() {
@@ -89,7 +101,7 @@ export class ConsultaSuspensionComponent implements OnInit {
       return;
     }
   
-    this.loader.display(true); // Mostrar loadeAr
+    this.loaderDinarp.display(true); // Mostrar loadeAr
   
     try {
       await this.getCJSentenciasCedula(); // Esperar hasta que termine la llamada al API
@@ -100,7 +112,7 @@ export class ConsultaSuspensionComponent implements OnInit {
       console.error('Error al obtener sentencias:', error);
       this.alerts.alertMessage('Error', 'No se pudo obtener la información.', 'error');
     } finally {
-      this.loader.display(false); // Ocultar loader después de completar (éxito o error)
+      this.loaderDinarp.display(false); // Ocultar loader después de completar (éxito o error)
     }
   }
 
@@ -175,7 +187,7 @@ export class ConsultaSuspensionComponent implements OnInit {
   ingresarSentenciaCJ(data: any) {
     this.limpiarFormIngreso();
     this.esIngresoManual = false;
-    this.sentenciaManual = {
+    this.sentenciaINGRESO = {
       institucion: 1, // Consejo de la Judicatura
       cedula: this.cedula,
       nombre: data.nombreProcesado || '',
@@ -184,13 +196,41 @@ export class ConsultaSuspensionComponent implements OnInit {
       codigoDuracion : this.codDuracion[0].id, // Años
       fechaInicio: data.fechaSentencia ? new Date(data.fechaSentencia) : '',
       fechaFin: new Date(), 
-      pdf: null
+      pdf: '' as string ,
     };
-  
-    this.mostrarFormularioManual = true;
+    console.log('📄 documentoBase64 recibido:', data.documentoBase64);
+    try {
+    if (data.documentoBase64) {
+      const prefixedBase64 = `data:application/pdf;base64,${data.documentoBase64}`;
+      const file = this.base64ToFile(prefixedBase64, `${data.numeroProceso}.pdf`);
+      this.sentenciaArchivo = file;
+    }
+  } catch (e) {
+    console.error('❌ No se pudo convertir el documento base64 en archivo:', e);
+    this.alerts.alertMessage('Error', 'El archivo PDF no es válido o no pudo ser procesado.', 'error');
+  }
+      this.mostrarFormularioManual = true;
   
     
   }
+
+  base64ToFile(base64: string, fileName: string): File {
+  const matches = base64.match(/^data:(.*);base64,(.*)$/);
+  if (!matches || matches.length !== 3) {
+    throw new Error('Base64 inválido');
+  }
+
+  const mime = matches[1];
+  const bstr = atob(matches[2]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n);
+  }
+
+  return new File([u8arr], fileName, { type: mime });
+}
 
 ////////////////////////////////////////////////////////////TRIBUNAL CONTENSIOSO ELECTORAL TCE ////////////////////////////////////////////////////
   public async getTCESentenciasCedula(): Promise<void> {
@@ -272,35 +312,17 @@ export class ConsultaSuspensionComponent implements OnInit {
   
       // Limpiar los campos del formulario
   limpiarFormIngreso() {
-    this.sentenciaManual.pdf = null;  // Limpiar el archivo PDF cargado
+    this.sentenciaINGRESO.pdf = '';  // Limpiar el archivo PDF cargado
     this.sentenciaArchivo = null; 
-    this.sentenciaManual.cedula = '';
-    this.sentenciaManual.nombre = '';
-    this.sentenciaManual.numeroSentencia = '';
-    this.sentenciaManual.fechaInicio = '';
-    this.sentenciaManual.fechaFin = '';
-    this.sentenciaManual.duracion = 0;
+    this.sentenciaINGRESO.cedula = '';
+    this.sentenciaINGRESO.nombre = '';
+    this.sentenciaINGRESO.numeroSentencia = '';
+    this.sentenciaINGRESO.fechaInicio = '';
+    this.sentenciaINGRESO.fechaFin = '';
+    this.sentenciaINGRESO.duracion = 0;
     if (this.uploaderComponent) {
       this.uploaderComponent.instance.reset();
     }
-  }
-
-   // Guardar los datos ingresados
-   guardarManual() {
-    if (!this.sentenciaManual.cedula || !this.sentenciaManual.numeroSentencia) {
-      alert('Por favor, complete al menos la cédula y el número de sentencia.');
-      return;
-    }
-
-    // Simulación de guardado (puedes reemplazar por una llamada a un servicio real)
-    console.log('Sentencia ingresada manualmente:', this.sentenciaManual);
-
-    // Aquí podrías llamar un servicio HTTP si deseas enviar estos datos al backend
-    // this.miServicio.guardarSentencia(this.sentenciaManual).subscribe(...)
-
-    alert('Sentencia guardada correctamente');
-    this.mostrarFormularioManual = false;
-    this.limpiarFormIngreso();
   }
 
   onArchivoSeleccionado(e: any): void {
@@ -332,6 +354,14 @@ export class ConsultaSuspensionComponent implements OnInit {
     return digitoVerificador === digitos[9];
   }
 
+  formatearFecha(fecha: Date | string): string {
+  const d = new Date(fecha);
+  const dia = d.getDate().toString().padStart(2, '0');
+  const mes = (d.getMonth() + 1).toString().padStart(2, '0');
+  const anio = d.getFullYear();
+  return `${dia}/${mes}/${anio}`;
+}
+
   abrirModalPDF(base64: string) {
     const pdfUrl = 'data:application/pdf;base64,' + base64;
     this.base64PDF = this.sanitizer.bypassSecurityTrustResourceUrl(pdfUrl);
@@ -339,12 +369,12 @@ export class ConsultaSuspensionComponent implements OnInit {
   }
 
   actualizarFechaFin(): void {
-    const inicio = new Date(this.sentenciaManual.fechaInicio);
-    const duracion = Number(this.sentenciaManual.duracion);
-    const tipo = Number(this.sentenciaManual.codigoDuracion);
+    const inicio = new Date(this.sentenciaINGRESO.fechaInicio);
+    const duracion = Number(this.sentenciaINGRESO.duracion);
+    const tipo = Number(this.sentenciaINGRESO.codigoDuracion);
   
     if (!inicio || !duracion || !tipo) {
-      this.sentenciaManual.fechaFin = '';
+      this.sentenciaINGRESO.fechaFin = '';
       return;
     }
   
@@ -364,21 +394,121 @@ export class ConsultaSuspensionComponent implements OnInit {
         break;
     }
   
-    this.sentenciaManual.fechaFin = fin;
+    this.sentenciaINGRESO.fechaFin = fin;
   }
-  ingresarSentenciaFinal() {
 
-    this.mostrarFormularioManual = false;
-    this.alerts.alertConfirm(
-      '¿Está seguro?',
-      'Esta acción ingresará la Suspensión de Derechos Políticos.',
-      () => {
-        this.alerts.alertMessage('Exito', 'Suspensión Ingresada Correctamente.', 'success');
-      },
-      () => {
-        this.mostrarFormularioManual = false;
+    async subirPDF(): Promise<void> {
+      if (!this.sentenciaArchivo) {
+        this.alerts.alertMessage('Error', 'No hay archivo seleccionado.', 'error');
+        return;
       }
-    );
+      try {
+        const uri = await this.repositoryService.uploadFile(this.sentenciaArchivo, 'SDP/SENTENCIAS').toPromise();
+        this.sentenciaINGRESO.pdf = uri ?? '';
+      } catch (error) {
+        console.error('Error al subir archivo PDF:', error);
+        this.alerts.alertMessage('Error', 'No se pudo subir el archivo.', 'error');
+      }
+    }
+
+
+verificarExistenciaSentencia() {
+  this.mostrarFormularioManual = false;
+
+  const body: IGetExistenciaSuspensionViewModel = {
+    cedula: this.sentenciaINGRESO.cedula,
+    numeroSentencia: this.sentenciaINGRESO.numeroSentencia
+  };
+
+  this._getExistenciaSuspensionUseCase.getExistenciaSuspension(body).subscribe({
+    next: (response) => {
+      console.log('✅ Respuesta desde getExistenciaSuspension:', response);
+
+      if (!Array.isArray(response) || response.length === 0) {
+        this.alerts.alertMessage('Atención', 'No se recibió una respuesta válida del servicio.', 'info');
+        return;
+      }
+
+      const resultado = response[0];
+      console.log('🔍 Resultado:', resultado);
+
+      switch (resultado?.info) {
+        case 'OK':
+          this.alerts.alertMessage('Información', resultado.mensaje ?? 'Ya existe una suspensión registrada.', 'warning');
+          break;
+        case 'NOT_FOUND':
+          this.guardarArchivoSentencia();
+          break;
+        default:
+          this.alerts.alertMessage('Atención', 'No se pudo verificar la existencia de la Suspensión. Intente más tarde.', 'info');
+          break;
+      }
+    },
+    error: (err) => {
+      console.error('❌ Error en getExistenciaSuspension:', err);
+      this.alerts.alertMessage('Error', 'No se pudo validar la existencia de la sentencia. Intente nuevamente.', 'error');
+    }
+  });
+}
+
+async guardarArchivoSentencia(): Promise<void> {
+  if (!this.sentenciaArchivo) {
+    this.alerts.alertMessage('Error', 'Debe seleccionar un archivo PDF de la Sentencia antes de continuar.', 'error');
+    return;
   }
+
+  try {
+    this.loaderMain.display(true);
+    const uri = await this.repositoryService.uploadFile(this.sentenciaArchivo, 'SDP/SENTENCIAS').toPromise();
+
+    if (!uri) {
+      throw new Error('El servicio no devolvió una URI válida.');
+    }
+
+    this.sentenciaINGRESO.pdf = uri;
+    console.log('✅ Archivo subido con éxito. URI:', uri);
+
+    this.guardarSentenciaFINAL();
+
+  } catch (error) {
+    this.alerts.alertMessage('Error', 'No se pudo subir el archivo de la sentencia.', 'error');
+  } finally {
+    this.loaderMain.display(false);
+  }
+}
+
+guardarSentenciaFINAL(): void {
+  const body: IGetInsertarSuspensionViewModel = {
+    cedula: this.sentenciaINGRESO.cedula,
+    nombreCiudadano: this.sentenciaINGRESO.nombre,
+    codigoEstadoCiudadano: '1', //SUSPENDIDO
+    codigoInstitucion: this.sentenciaINGRESO.institucion.toString(),
+    numeroSentencia: this.sentenciaINGRESO.numeroSentencia,
+    duracion: this.sentenciaINGRESO.duracion.toString(),
+    codigoDuracion: this.sentenciaINGRESO.codigoDuracion.toString(),
+     fechaInicioSentencia: this.formatearFecha(this.sentenciaINGRESO.fechaInicio as string | Date),
+    fechaFinSentencia: this.formatearFecha(this.sentenciaINGRESO.fechaFin as string | Date),
+    fuente: this.esIngresoManual ? 'CNE' : 'DINARP',
+    urlDocumentoSentencia: this.sentenciaINGRESO.pdf,
+    codigoTransaccion: '123', 
+    codigoUsuario: sessionStorage.getItem('usercode') || '9999'
+  };
+
+  this.loaderMain.display(true);
+
+  this._getInsertarSuspensionUseCase.getExistenciaSuspension(body).subscribe({
+    next: (resp) => {
+      console.log('✅ Sentencia guardada correctamente:', resp);
+      this.alerts.alertMessage('Éxito', 'La sentencia fue registrada correctamente.', 'success');
+      this.mostrarFormularioManual = false;
+      this.limpiarFormIngreso();
+    },
+    error: (err) => {
+      console.error('❌ Error al guardar la sentencia:', err);
+      this.alerts.alertMessage('Error', 'No se pudo registrar la sentencia.', 'error');
+    },
+    complete: () => this.loaderMain.display(false)
+  });
+}
 
 }

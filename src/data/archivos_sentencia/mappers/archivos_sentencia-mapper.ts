@@ -1,10 +1,10 @@
 import { AMapper } from "./a-mapper";
 import { uid } from 'uid';
-import { IGetSentenciasTCERegistroViewModel } from "src/domain/tribunalContElectoral/viewModels/i-sentenciasTCE.viewModel";
-import { IGetSentenciasTCERegistroModel} from "../models/tribunalContElectoral.model";
+import { IGetSentenciasRegistroViewModel } from "src/domain/consJudicatura/viewModels/i-sentencias.viewModel";
+import { IGetSentenciasRegistroModel} from "../models/consJudicatura.model";
 
 
-export class tribunalContElectoralMapper extends AMapper<any, any> {
+export class CJudicaturaMapper extends AMapper<any, any> {
     public clientIp: string;
     public clientBrowser: string;
 
@@ -14,7 +14,7 @@ export class tribunalContElectoralMapper extends AMapper<any, any> {
         this.clientBrowser = sessionStorage.getItem('clientBrowser') || 'Navegador desconocido';
     }
 
-    mapGetRegistroTo(param: IGetSentenciasTCERegistroViewModel): IGetSentenciasTCERegistroModel {
+    mapGetRegistroTo(param: IGetSentenciasRegistroViewModel): IGetSentenciasRegistroModel {
       // Crear el cuerpo completo con todos los campos
       let body = {
          cedula: param.cedula ?? '' ,
@@ -30,4 +30,5 @@ export class tribunalContElectoralMapper extends AMapper<any, any> {
       console.log('body mapper ', body); // Revisa el contenido generado
       return body;
   }
+
 }

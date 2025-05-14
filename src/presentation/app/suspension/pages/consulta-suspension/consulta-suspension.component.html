@@ -1,6 +1,10 @@
-<div *ngIf="loader.status | async" class="loader-overlay">
+<div *ngIf="loaderDinarp.status | async" class="loader-overlay">
   <div class="loader"></div>
   <div class="loader-message">Consultando Servicios DINARP...</div>
+</div>
+
+<div *ngIf="loaderMain.status | async" class="loader-overlay">
+  <div class="loader"></div>
 </div>
 
 <div class="busqueda-container">
@@ -120,7 +124,7 @@
         <div>
           <label>Institución:</label>
           <dx-select-box
-            [(value)]="sentenciaManual.institucion"
+            [(value)]="sentenciaINGRESO.institucion"
             [readOnly]="!esIngresoManual"
             [items]="instituciones"
             displayExpr="name"
@@ -129,24 +133,24 @@
         </div>
         <div>
           <label>Cédula:</label>
-          <dx-text-box [(value)]="sentenciaManual.cedula" placeholder="Cédula"></dx-text-box>
+          <dx-text-box [(value)]="sentenciaINGRESO.cedula" placeholder="Cédula"></dx-text-box>
         </div>
 
         <!-- Segunda fila -->
         <div>
           <label>Nombres y Apellidos:</label>
-          <dx-text-box [(value)]="sentenciaManual.nombre" placeholder="Nombres"></dx-text-box>
+          <dx-text-box [(value)]="sentenciaINGRESO.nombre" placeholder="Nombres"></dx-text-box>
         </div>
         
         <div>
           <label>Nro. Sentencia:</label>
-          <dx-text-box [(value)]="sentenciaManual.numeroSentencia" placeholder="Nro. Sentencia"></dx-text-box>
+          <dx-text-box [(value)]="sentenciaINGRESO.numeroSentencia" placeholder="Nro. Sentencia"></dx-text-box>
         </div>
 
         <!-- Tercera fila -->
         <div>
           <label>Duración (número):</label>
-          <dx-number-box [(value)]="sentenciaManual.duracion" 
+          <dx-number-box [(value)]="sentenciaINGRESO.duracion" 
           (onValueChanged)="actualizarFechaFin()"></dx-number-box>
           
         </div>
@@ -154,7 +158,7 @@
         <div>
           <label>Tipo de Duración:</label>
           <dx-select-box
-            [(value)]="sentenciaManual.codigoDuracion"
+            [(value)]="sentenciaINGRESO.codigoDuracion"
             [items]="codDuracion"
             displayExpr="name"
             valueExpr="id"
@@ -165,12 +169,12 @@
         <!-- Cuarta fila -->
         <div>
           <label>Inicio de Sentencia:</label>
-          <dx-date-box [(value)]="sentenciaManual.fechaInicio" displayFormat="dd/MM/yyyy"
+          <dx-date-box [(value)]="sentenciaINGRESO.fechaInicio" displayFormat="dd/MM/yyyy"
           (onValueChanged)="actualizarFechaFin()"></dx-date-box>
         </div>
         <div>
           <label>Fin de Sentencia:</label>
-          <dx-date-box [(value)]="sentenciaManual.fechaFin" displayFormat="dd/MM/yyyy" [readOnly]="true"></dx-date-box>
+          <dx-date-box [(value)]="sentenciaINGRESO.fechaFin" displayFormat="dd/MM/yyyy" [readOnly]="true"></dx-date-box>
         </div>
 
     <!-- Quinta fila (centrado) -->
@@ -201,7 +205,7 @@
 
       <!-- Botones -->
       <div class="botones-formulario mt-4 text-center">
-        <dx-button text="Guardar" type="success" (onClick)="ingresarSentenciaFinal()" icon="save"></dx-button>
+        <dx-button text="Guardar" type="success" (onClick)="verificarExistenciaSentencia()" icon="save"></dx-button>
         <dx-button text="Limpiar" type="default" (onClick)="limpiarFormIngreso()" icon="refresh"></dx-button>
         <dx-button text="Cancelar" type="danger" (onClick)="cancelarFormIngreso()" icon="close"></dx-button>
       </div>
