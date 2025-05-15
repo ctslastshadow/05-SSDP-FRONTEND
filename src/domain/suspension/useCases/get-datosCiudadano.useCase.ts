@@ -9,7 +9,7 @@ import { IListarDatosCiudadanoRsViewModel  } from 'src/data/suspension/models/su
 export class GetDatosCiudadanoUseCase {
     constructor(private _aDatosCiudadanoService: ASuspensionService) { }
    
-    public getExistenciaSuspension(body: IGetDatosCiudadanoViewModel): Observable<IListarDatosCiudadanoRsViewModel>{
+    public getDatosCiudadano(body: IGetDatosCiudadanoViewModel): Observable<IListarDatosCiudadanoRsViewModel>{
         return this._aDatosCiudadanoService.getDatosCiudadanosService(body);
     }
 

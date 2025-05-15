@@ -9,7 +9,7 @@ import { IInsertarSuspensionRsViewModel  } from 'src/data/suspension/models/susp
 export class GetInsertarSuspensionUseCase {
     constructor(private _aInsertarSuspensionService: ASuspensionService) { }
    
-    public getExistenciaSuspension(body: IGetInsertarSuspensionViewModel): Observable<IInsertarSuspensionRsViewModel>{
+    public getInsertarSuspension(body: IGetInsertarSuspensionViewModel): Observable<IInsertarSuspensionRsViewModel>{
         return this._aInsertarSuspensionService.getInsertarSuspensionService(body);
     }
 

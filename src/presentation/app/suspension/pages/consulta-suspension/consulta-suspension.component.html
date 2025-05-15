@@ -5,6 +5,7 @@
 
 <div *ngIf="loaderMain.status | async" class="loader-overlay">
   <div class="loader"></div>
+   <div class="loader-message">Espere por favor...</div>
 </div>
 
 <div class="busqueda-container">
@@ -117,6 +118,7 @@
   [hideOnOutsideClick]="true"
 >
   <div class="p-4">
+    <dx-validation-group #validationGroupRef>
     <form #formManual="ngForm">
       <div class="form-grid">
 
@@ -133,28 +135,73 @@
         </div>
         <div>
           <label>Cédula:</label>
-          <dx-text-box [(value)]="sentenciaINGRESO.cedula" placeholder="Cédula"></dx-text-box>
+          <dx-text-box [(value)]="sentenciaINGRESO.cedula" placeholder="Cédula" [readOnly]="datosAutocompletados || IsSentenciaDinarp">
+            <dx-validator>
+              <dxi-validation-rule type="required" message="Debe ingresar la Cédula del Ciudadano.">
+              </dxi-validation-rule>
+          </dx-validator>
+          </dx-text-box>
         </div>
 
         <!-- Segunda fila -->
         <div>
           <label>Nombres y Apellidos:</label>
-          <dx-text-box [(value)]="sentenciaINGRESO.nombre" placeholder="Nombres"></dx-text-box>
+          <dx-text-box [(value)]="sentenciaINGRESO.nombre" placeholder="Nombres"  [readOnly]="datosAutocompletados || IsSentenciaDinarp">
+            <dx-validator>
+              <dxi-validation-rule type="required" message="Debe ingresar el nombre del Ciudadano.">
+              </dxi-validation-rule>
+          </dx-validator>
+          </dx-text-box>
         </div>
         
         <div>
           <label>Nro. Sentencia:</label>
-          <dx-text-box [(value)]="sentenciaINGRESO.numeroSentencia" placeholder="Nro. Sentencia"></dx-text-box>
+          <dx-text-box [(value)]="sentenciaINGRESO.numeroSentencia" placeholder="Nro. Sentencia" [readOnly]="IsSentenciaDinarp"> 
+            <dx-validator>
+              <dxi-validation-rule type="required" message="Debe ingresar un número de sentencia.">
+              </dxi-validation-rule>
+          </dx-validator>
+          </dx-text-box>
+         
         </div>
 
         <!-- Tercera fila -->
+     
+        <div>
+          <label>Inicio de Sentencia:</label>
+          <dx-date-box [(value)]="sentenciaINGRESO.fechaInicio" displayFormat="dd/MM/yyyy" [readOnly]="IsSentenciaDinarp"
+          (onValueChanged)="actualizarFechaFin()">
+          <dx-validator>
+              <dxi-validation-rule type="required" message="Debe ingresar la fecha de Inicio de Sentencia.">
+              </dxi-validation-rule>
+          </dx-validator>
+        </dx-date-box>
+        </div>
+        <div>
+          <label>Fin de Sentencia:</label>
+          <dx-date-box [(value)]="sentenciaINGRESO.fechaFin" displayFormat="dd/MM/yyyy" [readOnly]="true">
+               <dx-validator>
+              <dxi-validation-rule type="required" message="Debe ingresar la fecha de Fin de Sentencia.">
+              </dxi-validation-rule>
+          </dx-validator>
+          </dx-date-box>
+        </div>
+
         <div>
           <label>Duración (número):</label>
           <dx-number-box [(value)]="sentenciaINGRESO.duracion" 
-          (onValueChanged)="actualizarFechaFin()"></dx-number-box>
+          (onValueChanged)="actualizarFechaFin()">
+         <dx-validator>
+          <dxi-validation-rule type="required" message="Debe ingresar una duración."></dxi-validation-rule>
+          <dxi-validation-rule type="custom" 
+                         [validationCallback]="validateDuracionMayorACero"
+                         message="La duración debe ser mayor a cero.">
+          </dxi-validation-rule>
+  </dx-validator>
+        </dx-number-box>
           
         </div>
-
+      <!-- Cuarta fila -->
         <div>
           <label>Tipo de Duración:</label>
           <dx-select-box
@@ -166,22 +213,13 @@
           </dx-select-box>
         </div>
 
-        <!-- Cuarta fila -->
-        <div>
-          <label>Inicio de Sentencia:</label>
-          <dx-date-box [(value)]="sentenciaINGRESO.fechaInicio" displayFormat="dd/MM/yyyy"
-          (onValueChanged)="actualizarFechaFin()"></dx-date-box>
-        </div>
-        <div>
-          <label>Fin de Sentencia:</label>
-          <dx-date-box [(value)]="sentenciaINGRESO.fechaFin" displayFormat="dd/MM/yyyy" [readOnly]="true"></dx-date-box>
-        </div>
-
+      
     <!-- Quinta fila (centrado) -->
 <div class="col-span-2">
   <label style="display: block; text-align: center;">Documento de Sentencia:</label>
 
   <ng-container *ngIf="esIngresoManual; else archivoCargado">
+     
     <div style="display: flex; justify-content: center; ">
       <dx-file-uploader
         #uploaderRef
@@ -191,6 +229,10 @@
         [showFileList]="true"
         (onValueChanged)="onArchivoSeleccionado($event)">
       </dx-file-uploader>
+     
+    </div>
+    <div *ngIf="sentenciaArchivoValido && mostrarFormularioManual" style="color: red; text-align: center;">
+      Debe seleccionar un archivo PDF válido (máx. 2MB).
     </div>
   </ng-container>
 
@@ -210,6 +252,7 @@
         <dx-button text="Cancelar" type="danger" (onClick)="cancelarFormIngreso()" icon="close"></dx-button>
       </div>
     </form>
+    </dx-validation-group>
   </div>
 </dx-popup>
 

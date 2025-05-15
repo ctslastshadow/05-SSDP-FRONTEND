@@ -29,6 +29,8 @@ export interface IGetExistenciaSuspensionModel {
 
 ////////////////////////Listar datos del ciudadano/////////////////////
 //Respuesta esperada del endpoint
+
+
 export interface IListarDatosCiudadanoRsViewModel extends IResponseStatusViewModel {
     data?: IListarDatosCiudadanoViewModel[];
 
@@ -39,6 +41,7 @@ export interface IListarDatosCiudadanoViewModel {
     info: string | null;
     mensaje: string | null;
 }
+
 //Modelo de Ingreso de datos
 export interface IGetDatosCiudadanoModel {
     auditoria: {
