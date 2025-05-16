@@ -58,7 +58,7 @@ export class SuspensionService extends ASuspensionService {
     }
 
     public getInsertarSuspensionService(body: IGetInsertarSuspensionViewModel): Observable<IInsertarSuspensionRsViewModel> {
-     
+        
         const url = `${this.urlServiciosSSDP}Suspension/GuardarSuspension`;
         console.log('URL Ingreso Sentencia:', url); 
         console.log(' Ingreso Sentencia BODY que se enviará:', body); 

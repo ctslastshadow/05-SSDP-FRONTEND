@@ -10,7 +10,7 @@ import { DxNumberBoxModule } from 'devextreme-angular/ui/number-box';
 import { HttpClientModule } from '@angular/common/http';
 import { DataModule } from 'src/data/data.module';
 import { SuspensionModule } from 'src/presentation/app/suspension/suspension.module';
-
+import { DxTemplateModule } from 'devextreme-angular';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
@@ -34,7 +34,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatDialogModule,
     MatIconModule,
     MatButtonModule,
-    SuspensionModule
+    SuspensionModule,
+    DxTemplateModule
   ],
   providers: [
    

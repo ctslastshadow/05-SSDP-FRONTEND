@@ -11,7 +11,7 @@ import { ATribunalContElectoralService } from 'src/domain/tribunalContElectoral/
 import { GetTribunalContElectoralUseCase } from 'src/domain/tribunalContElectoral/useCases/get-tribunalContElectoral.useCase';
 import { TribunalContElectoralService } from './tribunalContElectoral/service/tribunalContElectoral.service';
 import { tribunalContElectoralMapper } from './tribunalContElectoral/mappers/tribunalContElectoral-mapper';
-
+//suspension
 import { ASuspensionService } from 'src/domain/suspension/services/a-suspension-service';
 import { SuspensionService } from './suspension/service/suspension.service';
 import { suspensionMapper } from './suspension/mappers/suspension-mapper';
@@ -19,6 +19,14 @@ import { suspensionMapper } from './suspension/mappers/suspension-mapper';
 import { GetExistenciaSuspensionUseCase } from 'src/domain/suspension/useCases/get-existenciaSuspension.useCase';
 import { GetDatosCiudadanoUseCase } from 'src/domain/suspension/useCases/get-datosCiudadano.useCase';
 import { GetInsertarSuspensionUseCase } from 'src/domain/suspension/useCases/get-insertarSuspension.useCase';
+//restitucion
+import { ARestitucionService } from 'src/domain/restitucion/services/a-restitucion-service';
+import { RestitucionService } from './restitucion/service/restitucion.service';
+import { restitucionMapper } from './restitucion/mappers/restitucion-mapper';
+
+import { GetSuspensionCiudadanoUseCase } from 'src/domain/restitucion/useCases/get-suspensionCiudadano.useCase';
+import { GetInsertarRestitucionUseCase } from 'src/domain/restitucion/useCases/get-insertarRestitucion.useCase';
+
 
 import { ARepositoryService } from 'src/domain/archivos_sentencia/services/a-archivos_sentencia-service';
 import { RepositoryService } from './archivos_sentencia/service/archivos_sentencia.service';
@@ -51,7 +59,7 @@ export const getExistenciaSuspensionUseCaseProvider = {
   deps: [ASuspensionService],
 };
 
-//* BuscarDatos
+//* BuscarDatos Ciudadano
 const GetDatosCiudadanoUseCaseFactory =
   (aSuspensionService: ASuspensionService) => new GetDatosCiudadanoUseCase(aSuspensionService);
 
@@ -71,6 +79,26 @@ export const getInsertarSentenciaUseCaseProvider = {
   deps: [ASuspensionService],
 };
 
+//* Buscar Sentencias Ciudadano
+const GetSuspensionCiudadanoUseCaseFactory =
+  (aRestitucionService: ARestitucionService) => new GetSuspensionCiudadanoUseCase(aRestitucionService);
+
+export const getSentenciaCiudadanoUseCaseProvider = {
+  provide: GetSuspensionCiudadanoUseCase,
+  useFactory: GetSuspensionCiudadanoUseCaseFactory,
+  deps: [ARestitucionService],
+};
+
+//* InsertarRestitucion
+const GetInsertarRestitucionUseCaseFactory =
+  (aRestitucionService: ARestitucionService) => new GetInsertarRestitucionUseCase(aRestitucionService);
+
+export const getInsertarRestitucionUseCaseProvider = {
+  provide: GetInsertarRestitucionUseCase,
+  useFactory: GetInsertarRestitucionUseCaseFactory,
+  deps: [ARestitucionService],
+};
+
 @NgModule({
   declarations: [],
   providers: [
@@ -79,14 +107,20 @@ export const getInsertarSentenciaUseCaseProvider = {
     getExistenciaSuspensionUseCaseProvider, 
     getDatosCiudadanoUseCaseProvider,
     getInsertarSentenciaUseCaseProvider,
+    getSentenciaCiudadanoUseCaseProvider,
+    getInsertarRestitucionUseCaseProvider,
+
     //Mappers
     CJudicaturaMapper,
     tribunalContElectoralMapper,
     suspensionMapper, 
-    
+    restitucionMapper,
+
+     //provide use class
     { provide:ACJudicaturaService, useClass:CJudicaturaService},
     { provide:ATribunalContElectoralService, useClass:TribunalContElectoralService},
     { provide: ASuspensionService, useClass: SuspensionService },
+    { provide: ARestitucionService, useClass: RestitucionService },
     { provide: ARepositoryService, useClass: RepositoryService },
   ],
   imports: [

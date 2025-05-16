@@ -12,7 +12,15 @@
   <h1 class="titulo-principal">Suspensión de Derechos Políticos</h1>
 
   <div class="formulario-busqueda">
-    <dx-text-box [(value)]="cedula" placeholder="Ingrese la cédula" width="300"></dx-text-box>
+     <dx-text-box
+        [(value)]="cedula"
+        placeholder="Ingrese la cédula"
+        width="300"
+        [mask]="'0000000000'"
+        [showMaskMode]="'onFocus'"
+        [maskRules]="maskCedulaRules">
+        
+      </dx-text-box>
     <dx-button text="Buscar" (onClick)="buscarInfoSuspension()" type="success" icon="search"></dx-button>
     <dx-button text="Ingreso Manual" (onClick)="buscarInfoIngresoManual()" type="normal" icon="add"></dx-button>
   </div>

@@ -88,6 +88,7 @@ export class ConsultaSuspensionComponent implements OnInit {
   esErrorTCE: boolean = false;
   mostrarPdfPopup: boolean = false;
   base64PDF: SafeResourceUrl | null = null;
+   maskCedulaRules = { '0': new RegExp('\\d') };
 ///////////////////////////////////////////////////////////////CONSTRUCTOR///////////////////////////////////////////////////
   constructor(
     //utilitarios
@@ -102,6 +103,7 @@ export class ConsultaSuspensionComponent implements OnInit {
      private _getInsertarSuspensionUseCase: GetInsertarSuspensionUseCase,
      private _getDatosCiudadanoUseCase: GetDatosCiudadanoUseCase,
     private repositoryService: ARepositoryService,
+    
   ) {}
 
   ngOnInit() {
@@ -543,6 +545,7 @@ verificarExistenciaSentencia() {
       }
     },
     error: (err) => {
+       this.loaderMain.display(false);
       console.error('❌ Error en getExistenciaSuspension:', err);
       this.alerts.alertMessage('Error', 'No se pudo validar la existencia de la sentencia. Intente nuevamente.', 'error');
     }
@@ -570,7 +573,9 @@ async guardarArchivoSentencia(): Promise<void> {
     this.guardarSentenciaFINAL();
 
   } catch (error) {
-    this.alerts.alertMessage('Error', 'No se pudo subir el archivo de la sentencia.', 'error');
+    this.loaderMain.display(false);
+    console.error('❌ Error al guardar la sentencia:', error);
+    this.alerts.alertMessage('Error', 'Ocurrió un Error, Por favor intente más tarde', 'error');
   }
 }
 

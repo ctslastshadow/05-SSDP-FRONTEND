@@ -1,28 +1,194 @@
-<div *ngIf="loader.status | async" class="loader-overlay">
-    <div class="loader"></div>
+<div *ngIf="loaderMain.status | async" class="loader-overlay">
+  <div class="loader"></div>
+   <div class="loader-message">Espere por favor...</div>
 </div>
-  
-  <div class="busqueda-container">
-    <h1 class="titulo-principal">Restitución de Derechos Políticos</h1>
-  
-    <div class="formulario-busqueda">
-      <dx-text-box [(value)]="cedula" placeholder="Ingrese la cédula" width="300"></dx-text-box>
-      <dx-button text="Buscar" (onClick)="buscarInfoRestitucion()" type="success" icon="search"></dx-button>
+
+<div class="busqueda-container">
+  <h1 class="titulo-principal">Restitución de Derechos Políticos</h1>
+  <div class="formulario-busqueda">
+      <dx-text-box
+        [(value)]="cedula"
+        placeholder="Ingrese la cédula"
+        width="300"
+        [mask]="'0000000000'"
+        [showMaskMode]="'onFocus'"
+        [maskRules]="maskCedulaRules">
+      </dx-text-box>
+    <dx-button text="Buscar" (onClick)="buscarInfoRestitucion()" type="success" icon="search"></dx-button>
+  </div>
+</div>
+
+<p class="titulo-secundatrio" *ngIf="resultado.length" style="padding-left: 30px;font-weight: bold;font-size: larger;">
+  Suspensiones Políticas
+</p>
+<div class="resultado-container" style="font-size: medium;">
+ <p *ngIf="mostrarMensajeDataSuspension" 
+     [ngClass]="{ 'texto-error': esErrorDataSuspension, 'texto-exito': !esErrorDataSuspension }"
+     style="padding-left: 30px;">
+    {{ mensajeDataSuspension }}
+  </p>
+
+  <dx-data-grid
+    *ngIf="resultado && resultado.length"
+    [dataSource]="resultado"
+    [showBorders]="true"
+    [columnAutoWidth]="true"
+    [rowAlternationEnabled]="true"
+    class="tabla-resultado"
+  >
+    <dxi-column dataField="codigoSuspension" caption="codigoSuspension" [visible]="false"></dxi-column>
+    <dxi-column dataField="numeroSentencia" caption="Sentencia"></dxi-column>
+    <dxi-column dataField="nombreCiudadano" caption="Ciudadano"></dxi-column>
+    <dxi-column dataField="nombreInstitucion" caption="Institución"></dxi-column>
+    <dxi-column dataField="estadoCiudadano" caption="Estado"></dxi-column>
+    <dxi-column dataField="tipoDuracion" caption="Duración"></dxi-column>
+
+    <dxi-column
+      dataField="fechaInicioSentencia"
+      caption="Inicio"
+      cellTemplate="fechaInicioTemplate">
+    </dxi-column>
+
+    <dxi-column
+      dataField="fechaFinSentencia"
+      caption="Fin"
+      cellTemplate="fechaFinTemplate">
+    </dxi-column>
+
+    <dxi-column
+      caption="OPCIONES"
+      cellTemplate="opcionesTemplate">
+    </dxi-column>
+
+    <!-- ✅ TEMPLATES ANIDADOS DENTRO DE dx-data-grid -->
+
+    <div *dxTemplate="let data of 'fechaInicioTemplate'">
+      {{ data.data.fechaInicioSentencia | date:'dd/MM/yyyy' }}
     </div>
-  
-    <dx-data-grid
-      *ngIf="resultado"
-      [dataSource]="resultado"
-      [showBorders]="true"
-      [columnAutoWidth]="true"
-      [rowAlternationEnabled]="true"
-      class="tabla-resultado"
-    >
-      <dxi-column dataField="campo1" caption="Campo"></dxi-column>
-      <dxi-column dataField="campo2" caption="Valor"></dxi-column>
-    </dx-data-grid>
+
+    <div *dxTemplate="let data of 'fechaFinTemplate'">
+      {{ data.data.fechaFinSentencia | date:'dd/MM/yyyy' }}
+    </div>
+
+    <div *dxTemplate="let data of 'opcionesTemplate'">
+      <div style="display: flex; gap: 8px; justify-content: center;">
+        <dx-button 
+          icon="file" 
+          type="default" 
+          stylingMode="contained" 
+          hint="Ver Sentencia"
+          (onClick)="verPDF(data.data.urlDocumentoSentencia)">
+        </dx-button>
+
+        <dx-button 
+          icon="plus" 
+          type="success" 
+          stylingMode="contained" 
+          hint="Restituir"
+          (onClick)="cargarDataRestitucionForm(data.data)">
+        </dx-button>
+      </div>
+    </div>
+
+  </dx-data-grid>
+</div>
+
+<dx-popup
+  [(visible)]="mostrarFormularioIngresoRestitucion"
+  [showTitle]="true"
+  title="Registrar restitución de Derechos Políticos"
+  [width]="800"
+  [height]="'auto'"
+  [dragEnabled]="true"
+  [hideOnOutsideClick]="true"
+>
+  <div class="p-4">
+    <dx-validation-group #validationGroupRef>
+      <form #formManual="ngForm">
+        <div class="form-grid">
+
+          <!-- Primera fila -->
+          <div>
+            <label>Cédula:</label>
+            <dx-text-box [(value)]="restitucionINGRESO.cedula" placeholder="Cédula" [readOnly]="IsSuspensionIngresada" >
+              <dx-validator>
+                <dxi-validation-rule type="required" message="Debe ingresar la Cédula del Ciudadano."></dxi-validation-rule>
+              </dx-validator>
+            </dx-text-box>
+          </div>
+
+          <div>
+            <label>Nombres y Apellidos:</label>
+            <dx-text-box [(value)]="restitucionINGRESO.nombre" placeholder="Nombres" [readOnly]="IsSuspensionIngresada" >
+              <dx-validator>
+                <dxi-validation-rule type="required" message="Debe ingresar el nombre del Ciudadano."></dxi-validation-rule>
+              </dx-validator>
+            </dx-text-box>
+          </div>
+
+          <!-- Segunda fila -->
+          <div>
+            <label>Nro. Sentencia:</label>
+            <dx-text-box [(value)]="restitucionINGRESO.numSentencia" placeholder="Nro. Sentencia" [readOnly]="IsSuspensionIngresada">
+              <dx-validator>
+                <dxi-validation-rule type="required" message="Debe ingresar un número de sentencia."></dxi-validation-rule>
+              </dx-validator>
+            </dx-text-box>
+          </div>
+          <!-- Tercera fila (centrado) -->
+          <div class="col-span-2">
+            <div>
+              <label>Observación:</label>
+              <dx-text-box [(value)]="restitucionINGRESO.observacion" placeholder="Observación para restitución">
+                <dx-validator>
+                  <dxi-validation-rule type="required" message="Debe ingresar una observacion."></dxi-validation-rule>
+                </dx-validator>
+              </dx-text-box>
+            </div>
+          </div>
+
+          <!-- Cudarta fila (centrado) -->
+          <div class="col-span-2">
+            <label style="display: block; text-align: center;">Documento de Restitución:</label>
+            <div style="display: flex; justify-content: center;">
+              <dx-file-uploader
+                #uploaderRef
+                accept=".pdf"
+                [multiple]="false"
+                [uploadMode]="'useForm'"
+                [showFileList]="true"
+                (onValueChanged)="onArchivoSeleccionado($event)">
+              </dx-file-uploader>
+            </div>
+            <div *ngIf="restitucionArchivoValido" style="color: red; text-align: center;">
+              Debe seleccionar un archivo PDF válido (máx. 2MB).
+            </div>
+          </div>
+
+         
+         
+        </div>
+         <!-- Botones -->
+         <div class="botones-formulario mt-4 text-center">
+            <dx-button text="Guardar" type="success" (onClick)="ingresarRestitucion()" icon="save"></dx-button>
+            <dx-button text="Limpiar" type="default" (onClick)="limpiarFormIngreso()" icon="refresh"></dx-button>
+            <dx-button text="Cancelar" type="danger" (onClick)="cancelarFormIngreso()" icon="close"></dx-button>
+          </div>
+      </form>
+    </dx-validation-group>
   </div>
-  
-  <div *ngIf="loader.status | async" class="loader-overlay">
-    <div class="loader"></div>
+</dx-popup>
+
+<dx-popup
+  [(visible)]="mostrarPdfPopup"
+  [showTitle]="true"
+  title="Documento PDF"
+  [width]="1100"
+  [height]="700"
+  [dragEnabled]="true"
+  [hideOnOutsideClick]="true"
+>
+  <div class="p-4" style="height: 100%;">
+    <iframe *ngIf="pdfUrl" [src]="pdfUrl" width="100%" height="600px"></iframe>
   </div>
+</dx-popup>
