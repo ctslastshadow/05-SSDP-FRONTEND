@@ -7,7 +7,7 @@ export interface IGetSuspensionCiudadanoViewModel {
 
 
 export interface IGetInsertarRestitucionViewModel {
-    codigoSuspension: string;
+    codigoSuspension: number;
     cedula: string;
     nombreCiudadano: string;
     numeroSentencia: string;

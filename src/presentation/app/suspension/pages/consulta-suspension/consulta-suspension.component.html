@@ -9,7 +9,7 @@
 </div>
 
 <div class="busqueda-container">
-  <h1 class="titulo-principal">Suspensión de Derechos Políticos</h1>
+  <h1 class="titulo-principal">Ingreso Suspensión de Derechos Políticos</h1>
 
   <div class="formulario-busqueda">
      <dx-text-box
@@ -53,7 +53,14 @@
         caption="Delito" 
         [width]="300">
     </dxi-column>
-    <dxi-column dataField="fechaSentencia" caption="Fecha Sentencia"></dxi-column>
+     <dxi-column
+      dataField="fechaSentencia"
+      caption="Fecha Sentencia"
+      cellTemplate="fechaSentenciaTemplate">
+    </dxi-column>
+    <div *dxTemplate="let data of 'fechaSentenciaTemplate'">
+      {{ data.data.fechaSentencia | date:'dd/MM/yyyy' }}
+    </div>
     <dxi-column dataField="tipoSentencia" caption="Tipo Sentencia"></dxi-column>
     <dxi-column caption="PDF" cellTemplate="pdfCell"></dxi-column>
     <div *dxTemplate="let data of 'pdfCell'">

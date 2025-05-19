@@ -1,0 +1,8 @@
+{
+        "remoteEntry": "https://frontend-apps.cne.gob.ec/mf-sife/remoteEntry.js",
+        "exposedModule": "./ComponentsModule",
+        "path": "sife",
+        "moduleName": "ComponentsModule",
+        "remoteName": "05-sife",
+        "isStandalone": false
+}

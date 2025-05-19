@@ -61,7 +61,7 @@ export interface IGetInsertarRestitucionModel {
         descripcionRequest: string;
         servidor: string;
     };
-    codigoSuspension: string;
+    codigoSuspension: number;
     cedula: string;
     nombreCiudadano: string;
     numeroSentencia: string;

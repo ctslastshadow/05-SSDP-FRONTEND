@@ -276,10 +276,10 @@ soloNumeros(e: any): void {
 
 enviarDatosRestitucion() {
   const body:IGetInsertarRestitucionViewModel = {
-    codigoSuspension: this.restitucionINGRESO.codSuspension.toString(),
+    codigoSuspension: this.restitucionINGRESO.codSuspension,
     cedula: this.restitucionINGRESO.cedula,
     nombreCiudadano: this.restitucionINGRESO.nombre,
-    numeroSentencia: this.restitucionINGRESO.numSentencia,
+    numeroSentencia: (this.restitucionINGRESO.numSentencia || '').trim(),
     observacion: this.restitucionINGRESO.observacion,
     urlDocumentoRestitucion: this.restitucionINGRESO.urlPdf,
     codigoUsuario: sessionStorage.getItem('usercode') || '9999',
@@ -289,7 +289,15 @@ enviarDatosRestitucion() {
  console.log('Datos a enviar PASO FINAL:',body);
   this._getInsertarRestitucionUseCase.getInsertarRestitucion(body).subscribe({
     next: (resp) => {
-      this.alerts.alertMessage('Éxito', 'La restitución fue registrada correctamente.', 'success');
+       if (!Array.isArray(resp) || resp.length === 0) {
+        this.alerts.alertMessage('Atención', 'No se recibió una respuesta válida del servicio Ingreso Suspensión.', 'info');
+        return;
+      }
+    const resultado = resp[0];
+      console.error('Resultado:', resultado);
+    if(resultado.info='OK'){
+       this.alerts.alertMessage('Información', resultado.mensaje ?? 'Restitucion Ingresada Correctament.', 'success');
+    }
       this.mostrarFormularioIngresoRestitucion = false;
       this.limpiarFormIngreso();
       this.cargarInfoRestitucion();

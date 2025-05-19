@@ -412,14 +412,7 @@ buscarInfoIngresoManual() {
   this.sentenciaArchivo = archivo;
   this.sentenciaArchivoValido = false;
 }
-/*
-  onArchivoSeleccionado(e: any): void {
-    const files = e.value;
-    if (files && files.length > 0) {
-      this.sentenciaArchivo = files[0]; // Solo un archivo PDF
-      console.log('Archivo seleccionado:', this.sentenciaArchivo);
-    }
-  }*/
+
 // ===================================================
 // 🔵 SECCIÓN: Métodos auxiliares o utilitarios
 // ===================================================
@@ -522,7 +515,6 @@ verificarExistenciaSentencia() {
 
   this._getExistenciaSuspensionUseCase.getExistenciaSuspension(body).subscribe({
     next: (response) => {
-      console.log('✅ Respuesta desde getExistenciaSuspension:', response);
 
       if (!Array.isArray(response) || response.length === 0) {
         this.alerts.alertMessage('Atención', 'No se recibió una respuesta válida del servicio Existencia Suspensión.', 'info');
@@ -585,7 +577,7 @@ guardarSentenciaFINAL(): void {
     nombreCiudadano: this.sentenciaINGRESO.nombre,
     codigoEstadoCiudadano: '1', //SUSPENDIDO
     codigoInstitucion: this.sentenciaINGRESO.institucion.toString(),
-    numeroSentencia: this.sentenciaINGRESO.numeroSentencia,
+    numeroSentencia: this.sentenciaINGRESO.numeroSentencia.trim(),
     duracion: this.sentenciaINGRESO.duracion.toString(),
     codigoDuracion: this.sentenciaINGRESO.codigoDuracion.toString(),
      fechaInicioSentencia: this.formatearFecha(this.sentenciaINGRESO.fechaInicio as string | Date),

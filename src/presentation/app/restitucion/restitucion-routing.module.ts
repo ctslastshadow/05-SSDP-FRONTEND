@@ -3,14 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { ConsultaRestitucionComponent } from './pages/consulta-restitucion/consulta-restitucion.component';
 
 const routes: Routes = [
-   {
-      path: '', component: ConsultaRestitucionComponent
-    },
     {
-      path: 'consulta', component: ConsultaRestitucionComponent
-    },
-    {
-      path: '**', redirectTo: ''
+      path: 'ingreso', component: ConsultaRestitucionComponent
     },
 ];
 

@@ -1,0 +1,18 @@
+[
+    {
+        "OpcionSistema": "Ingreso de Suspensiones",
+        "Url": "/sdp/suspension/ingreso"
+    },
+	{
+        "OpcionSistema": "Recepción del Expediente",
+        "Url": "/sdp/recepcion-expedientes"
+    },
+	{
+        "OpcionSistema": "Generar Orden de Trabajo",
+        "Url": "/sdp/generarOrden"
+    },
+	{
+        "OpcionSistema": "Consultar Orden de Trabajo",
+        "Url": "/sdp/consultarOrden"
+    }
+]

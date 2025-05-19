@@ -4,13 +4,7 @@ import { ConsultaSuspensionComponent } from './pages/consulta-suspension/consult
 
 const routes: Routes = [
   {
-    path: '', component: ConsultaSuspensionComponent
-  },
-  {
-    path: 'consulta', component: ConsultaSuspensionComponent
-  },
-  {
-    path: '**', redirectTo: ''
+    path: 'ingreso', component: ConsultaSuspensionComponent
   },
 
 ];
