@@ -38,34 +38,25 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 50px;
-    gap: 30px;
+    padding-bottom: 20px;
+    gap: 20px;
   }
 
-  .resultado-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-  }
-  
+.resultado-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;  /* ⬅️ Centra horizontalmente */
+  gap: 30px;
+  box-sizing: border-box;
+}
   .titulo-principal {
-    padding-top: 10px;
-    font-size: 1.5em;
-    font-weight: bold;
-    color: #2c3e50;
-    margin-bottom: 20px;
-    text-align: center;
-    font-family: 'Poppins', 'Roboto', 'Segoe UI', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 15px;
   }
 
-  .titulo-secundario {
-    font-size: 2em;
-    font-weight: bold;
-    color: #2c3e50;
-    text-align: left;
-    font-family: 'Poppins', 'Roboto', 'Segoe UI', sans-serif;
-  }
   
   .formulario-busqueda {
     display: flex;
@@ -74,7 +65,7 @@
   }
   
   .tabla-resultado {
-    width: 80%;
+    width: 100%; 
     margin-top: 30px;
   }
 
@@ -106,3 +97,91 @@
   .text-center {
     text-align: center;
   }
+
+.panel-demografico {
+  margin: 20px auto;
+  max-width: 600px;
+  background: #ffffff;
+  padding: 20px 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.panel-title {
+
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #2c3e50;
+}
+
+.tabla-demografica {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+
+.tabla-demografica td {
+  padding: 8px 4px;
+  vertical-align: top;
+}
+
+
+.panel-sentencias {
+  margin: 30px auto;
+  max-width: 95%;
+  background-color: #fff;
+  padding: 25px 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.08);
+  border-left: 6px solid #007bff;
+}
+
+.panel-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 5px;
+}
+
+.tabla-resultado {
+  font-size: 14px;
+}
+
+.texto-error {
+  color: #e74c3c;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.texto-exito {
+  color: #27ae60;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.panel-sentencias.rc {
+  border-left-color: #67b2e4;
+}
+.panel-sentencias.cj {
+  border-left-color: #3576b7;
+}
+
+.panel-sentencias.tce {
+  border-left-color: #105787;
+}
+
+
+  .contenedor-principal {
+  max-width: 95%;
+  margin: 30px auto;
+  padding: 30px;
+  background-color: rgba(255, 255, 255, 0.92); // Blanco con transparencia
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(5px); // Efecto glassmorphism si quieres
+  position: relative;
+  z-index: 1;
+}

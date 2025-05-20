@@ -6,9 +6,12 @@ import { DxFileUploaderComponent } from 'devextreme-angular';
 import { DxValidationGroupComponent } from 'devextreme-angular';
 import { uid } from 'uid';
 
-
 import { IGetSentenciasRegistroViewModel } from 'src/domain/consJudicatura/viewModels/i-sentencias.viewModel';
 import { GetCJudicaturaUseCase } from 'src/domain/consJudicatura/useCases/get-consJudicatura.useCase';
+
+import { IGetRegistroCivilViewModel } from 'src/domain/regCivil/viewModels/i-regCivil.viewModel';
+import { GetRCivilUseCase } from 'src/domain/regCivil/useCases/get-regCivil.useCase';
+
 
 import { IGetExistenciaSuspensionViewModel } from 'src/domain/suspension/viewModels/i-suspension.viewModel';
 import { GetExistenciaSuspensionUseCase } from 'src/domain/suspension/useCases/get-existenciaSuspension.useCase';
@@ -71,6 +74,13 @@ export class ConsultaSuspensionComponent implements OnInit {
     { id: 3, name: 'Días' }
   ];
 
+  datosDemograficos = {
+  nombre: '',
+  cedula: '',
+  condicion: '',
+  nacionalidad: ''
+};
+
   // DataSet
   public dataJudicatura: any[] = [];
   public dataTCE: any[] = [];
@@ -99,6 +109,7 @@ export class ConsultaSuspensionComponent implements OnInit {
     //Casos de Uso
     private _getCJudicaturaUseCase: GetCJudicaturaUseCase,
     private _getTContElectoralUseCase: GetTribunalContElectoralUseCase,
+     private _getRCivilUseCase: GetRCivilUseCase,
     private _getExistenciaSuspensionUseCase: GetExistenciaSuspensionUseCase,
      private _getInsertarSuspensionUseCase: GetInsertarSuspensionUseCase,
      private _getDatosCiudadanoUseCase: GetDatosCiudadanoUseCase,
@@ -121,9 +132,9 @@ export class ConsultaSuspensionComponent implements OnInit {
     this.loaderDinarp.display(true); // Mostrar loadeAr
   
     try {
-      await this.getCJSentenciasCedula(); // Esperar hasta que termine la llamada al API
-      console.log('databyteJudicatura',this.dataJudicatura);
-      await this.getTCESentenciasCedula(); // Esperar hasta que termine la llamada al API
+      await this.getRCInformacion(); 
+      await this.getCJSentenciasCedula(); 
+      await this.getTCESentenciasCedula(); 
       this.alerts.alertMessage('Búsqueda Exitosa', 'Consultas Realizadas.', 'success');
     } catch (error) {
       console.error('Error al obtener sentencias:', error);
@@ -132,6 +143,44 @@ export class ConsultaSuspensionComponent implements OnInit {
       this.loaderDinarp.display(false); // Ocultar loader después de completar (éxito o error)
     }
   }
+
+  ////////////////////////////////////////////////////////////REGISTRO CIVIL////////////////////////////////////////////////////
+ public async getRCInformacion(): Promise<void> {
+  let body: IGetRegistroCivilViewModel = {
+    cedula: this.cedula,
+    usuario: '8642',
+    proceso: '500',
+    ip: '192.188.1.1',
+    navegador: 'Chrome',
+    servidor: 'N0',
+    modulo: '500'
+  };
+
+  try {
+    const resultRC: any = await this._getRCivilUseCase.getRCivilInfo(body).toPromise();
+    console.log('respuesta completa REGISTRO CIVIL', resultRC);
+
+    const data = resultRC?.data;
+    if (Array.isArray(data)) {
+      const getValor = (campo: string) =>
+        data.find((item: any) => item.name === campo)?.value || '';
+
+      this.datosDemograficos = {
+        nombre: getValor('nombre'),
+        cedula: getValor('cedula'),
+        condicion: getValor('condicionCiudadano'),
+        nacionalidad: getValor('nacionalidad')
+      };
+    }
+
+  } catch (error) {
+    console.error('Error en getRCSentenciasCedula:', error);
+    this.alerts.alertMessage('Error', 'No se pudo obtener la información.', 'error');
+    this.mostrarMensajeCJ = true;
+    this.mensajeCJ = 'Error al realizar la consulta, por favor intente más tarde.';
+    this.mostrarTablaCJ = false;
+  }
+}
 
 
   ////////////////////////////////////////////////////////////CONSEJO DE LA JUDICATURA////////////////////////////////////////////////////

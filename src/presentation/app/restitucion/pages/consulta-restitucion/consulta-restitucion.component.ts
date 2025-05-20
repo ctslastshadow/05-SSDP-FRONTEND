@@ -70,7 +70,7 @@ pdfUrl: SafeResourceUrl | null = null;
 
   const body: IGetSuspensionCiudadanoViewModel = {
     cedula: this.cedula,
-    codigoEstadoCiudadano: '1'
+    codigoEstadoCiudadano: '1'   //------------------------ESTADO DE LO QUE DEBO traer en este caso es para el ingreso de restitucion entonces 2= SUSPENDIDO
   };
 
   this.loaderMain.display(true);

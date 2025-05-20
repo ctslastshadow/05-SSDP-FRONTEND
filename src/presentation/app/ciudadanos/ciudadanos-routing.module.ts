@@ -4,13 +4,7 @@ import { ConsultaComponent } from './pages/consulta/consulta.component';
 
 const routes: Routes = [
   {
-    path: '', component: ConsultaComponent
-  },
-  {
-    path: 'suspConsulta', component: ConsultaComponent
-  },
-  {
-    path: '**', redirectTo: ''
+    path: 'consultaNombres', component: ConsultaComponent
   },
 ];
 @NgModule({

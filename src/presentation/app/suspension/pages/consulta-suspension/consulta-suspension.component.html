@@ -7,9 +7,9 @@
   <div class="loader"></div>
    <div class="loader-message">Espere por favor...</div>
 </div>
-
+<div class="contenedor-principal">
 <div class="busqueda-container">
-  <h1 class="titulo-principal">Ingreso Suspensión de Derechos Políticos</h1>
+  <h1 class="titulo-principal">Ingreso - Suspensión de Derechos Políticos</h1>
 
   <div class="formulario-busqueda">
      <dx-text-box
@@ -17,19 +17,32 @@
         placeholder="Ingrese la cédula"
         width="300"
         [mask]="'0000000000'"
-        [showMaskMode]="'onFocus'"
-        [maskRules]="maskCedulaRules">
-        
+        [maskRules]="maskCedulaRules"
+        [showMaskMode]="'onFocus'">
       </dx-text-box>
     <dx-button text="Buscar" (onClick)="buscarInfoSuspension()" type="success" icon="search"></dx-button>
     <dx-button text="Ingreso Manual" (onClick)="buscarInfoIngresoManual()" type="normal" icon="add"></dx-button>
   </div>
 </div>
 
+<!-- Registro Civil -->
+<div class="panel-sentencias rc" *ngIf="datosDemograficos.nombre">
+  <h3 class="panel-title">Registro Civil - Estado del Ciudadano</h3>
+  <table class="tabla-demografica">
+    <tr>
+      <td><strong>Nombre:</strong></td>
+      <td>{{ datosDemograficos.nombre }}</td>
+    </tr>
+    <tr>
+      <td><strong>Condición:</strong></td>
+      <td>{{ datosDemograficos.condicion }}</td>
+    </tr>
+  </table>
+</div>
+
 <!-- Consejo de la Judicatura -->
-<p class="titulo-secundatrio" *ngIf="mensajeCJ.length || dataJudicatura.length" style="padding-left: 30px;font-weight: bold;font-size: larger;">
-  Consejo de la Judicatura (SENTENCIAS)
-</p>
+<div class="panel-sentencias cj" *ngIf="mensajeTCE.length || dataTCE.length">
+  <h3 class="panel-title">Consejo de la Judicatura - Sentencias</h3>
 
 <div class="resultado-container" style="font-size: medium;">
   <p *ngIf="mostrarMensajeCJ" 
@@ -46,8 +59,8 @@
     [rowAlternationEnabled]="true"
     class="tabla-resultado"
   >
-    <dxi-column dataField="numeroProceso" caption="Num Sentencia"></dxi-column>
-    <dxi-column dataField="nombreProcesado" caption="Procesado"></dxi-column>
+    <dxi-column dataField="numeroProceso" caption="Num Sentencia" [width]="200"></dxi-column>
+    <dxi-column dataField="nombreProcesado" caption="Procesado" [width]="300"></dxi-column>
     <dxi-column 
         dataField="asuntoDelito" 
         caption="Delito" 
@@ -55,14 +68,14 @@
     </dxi-column>
      <dxi-column
       dataField="fechaSentencia"
-      caption="Fecha Sentencia"
-      cellTemplate="fechaSentenciaTemplate">
+      caption="Fecha Sentencia" 
+      cellTemplate="fechaSentenciaTemplate" [width]="150">
     </dxi-column>
     <div *dxTemplate="let data of 'fechaSentenciaTemplate'">
       {{ data.data.fechaSentencia | date:'dd/MM/yyyy' }}
     </div>
-    <dxi-column dataField="tipoSentencia" caption="Tipo Sentencia"></dxi-column>
-    <dxi-column caption="PDF" cellTemplate="pdfCell"></dxi-column>
+    <dxi-column dataField="tipoSentencia" caption="Tipo Sentencia" [width]="220" ></dxi-column>
+    <dxi-column caption="PDF" cellTemplate="pdfCell" [width]="90"></dxi-column>
     <div *dxTemplate="let data of 'pdfCell'">
       <dx-button (click)="abrirModalPDF(data.data.documentoBase64)" type="default" icon="file">
       </dx-button>
@@ -70,7 +83,7 @@
 
     <dxi-column
   caption="INGRESAR"
-  [width]="100"
+  [width]="90"
   cellTemplate="ingresarCell">
 </dxi-column>
 
@@ -85,10 +98,12 @@
   </dx-data-grid>
 </div>
 
+</div>
+
+
 <!-- Tribunal Contencioso Electoral -->
-<p class="titulo-secundatrio" *ngIf="mensajeTCE.length || dataTCE.length" style="padding-left: 30px;font-weight: bold;font-size: larger;">
-  Tribunal Contencioso Electoral (SENTENCIAS)
-</p>
+<div class="panel-sentencias tce" *ngIf="mensajeTCE.length || dataTCE.length">
+  <h3 class="panel-title">Tribunal Contencioso Electoral - Sentencias</h3>
 
 <div class="resultado-container" style="font-size: medium;" >
   <p *ngIf="mostrarMensajeTCE" 
@@ -122,7 +137,12 @@
     </div>
   </dx-data-grid>
 </div>
+</div>
 
+</div>
+
+
+ <!-- POPUPS -->
 <dx-popup
   [(visible)]="mostrarFormularioManual"
   [showTitle]="true"

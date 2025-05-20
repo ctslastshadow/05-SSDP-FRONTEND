@@ -11,6 +11,11 @@ import { ATribunalContElectoralService } from 'src/domain/tribunalContElectoral/
 import { GetTribunalContElectoralUseCase } from 'src/domain/tribunalContElectoral/useCases/get-tribunalContElectoral.useCase';
 import { TribunalContElectoralService } from './tribunalContElectoral/service/tribunalContElectoral.service';
 import { tribunalContElectoralMapper } from './tribunalContElectoral/mappers/tribunalContElectoral-mapper';
+
+import { ARCivilService } from 'src/domain/regCivil/services/a-regCivil-service';
+import { GetRCivilUseCase } from 'src/domain/regCivil/useCases/get-regCivil.useCase';
+import { RCivilService } from './regCivil/service/regCivil.service';
+import { RCivilMapper } from './regCivil/mappers/regCivil-mapper';
 //suspension
 import { ASuspensionService } from 'src/domain/suspension/services/a-suspension-service';
 import { SuspensionService } from './suspension/service/suspension.service';
@@ -47,6 +52,15 @@ export const getTribunalContElectoralUseCaseProvider = {
   provide: GetTribunalContElectoralUseCase,
   useFactory: GetTribunalContElectoralUseCaseFactory,
   deps: [ATribunalContElectoralService],
+};
+
+//* RCInfo
+const GetRegCivilUseCaseFactory =
+  (ARegCivilService: ARCivilService) => new GetRCivilUseCase(ARegCivilService);
+export const getRegCivilUseCaseProvider = {
+  provide: GetRCivilUseCase,
+  useFactory: GetRegCivilUseCaseFactory,
+  deps: [ARCivilService],
 };
 
 //* ExistenciaSentencia
@@ -104,6 +118,7 @@ export const getInsertarRestitucionUseCaseProvider = {
   providers: [
     getCJudicaturaUseCaseProvider,
     getTribunalContElectoralUseCaseProvider,
+    getRegCivilUseCaseProvider,
     getExistenciaSuspensionUseCaseProvider, 
     getDatosCiudadanoUseCaseProvider,
     getInsertarSentenciaUseCaseProvider,
@@ -113,12 +128,14 @@ export const getInsertarRestitucionUseCaseProvider = {
     //Mappers
     CJudicaturaMapper,
     tribunalContElectoralMapper,
+    RCivilMapper,
     suspensionMapper, 
     restitucionMapper,
 
      //provide use class
     { provide:ACJudicaturaService, useClass:CJudicaturaService},
     { provide:ATribunalContElectoralService, useClass:TribunalContElectoralService},
+    { provide:ARCivilService, useClass:RCivilService},
     { provide: ASuspensionService, useClass: SuspensionService },
     { provide: ARestitucionService, useClass: RestitucionService },
     { provide: ARepositoryService, useClass: RepositoryService },
