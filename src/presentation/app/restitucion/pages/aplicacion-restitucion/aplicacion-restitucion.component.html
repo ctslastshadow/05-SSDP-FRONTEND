@@ -1,1 +1,58 @@
-<p>aplicacion-restitucion works!</p>
+<div *ngIf="loaderMain.status | async" class="loader-overlay">
+  <div class="loader"></div>
+   <div class="loader-message">Espere por favor...</div>
+</div>
+<div class="contenedor-principal">
+<div class="busqueda-container">
+  <h1 class="titulo-principal">Aplicación - Restitucion de Derechos Políticos</h1>
+</div>
+
+<div class="panel-sentencias rc" *ngIf="resultado.length">
+    <h3 class="panel-title">Restituciones Ingresadas</h3>
+ <p *ngIf="mostrarMensajeDataRestitucion" 
+     [ngClass]="{ 'texto-error': esErrorDataRestitucion, 'texto-exito': !esErrorDataRestitucion }"
+     style="padding-left: 30px;">
+    {{ mensajeDataRestitucion }}
+  </p>
+
+  <dx-data-grid
+    *ngIf="resultado && resultado.length"
+    [dataSource]="resultado"
+    [showBorders]="true"
+    [columnAutoWidth]="true"
+    [rowAlternationEnabled]="true"
+    class="tabla-resultado"
+  >
+    <dxi-column dataField="codigoSuspension" caption="codigoSuspension" [visible]="false"></dxi-column>
+    <dxi-column dataField="nombreCiudadano" caption="Ciudadano"></dxi-column>
+    <dxi-column dataField="cedula" caption="Cédula"></dxi-column>
+    <dxi-column dataField="numeroSentencia" caption="Nro. Proceso/Causa"></dxi-column>
+    <dxi-column dataField="nombreInstitucion" caption="Institución"></dxi-column>
+    <dxi-column dataField="estadoCiudadano" caption="Estado"></dxi-column>
+    <dxi-column dataField="tipoDuracion" caption="Duración"></dxi-column>
+
+    <dxi-column
+      dataField="fechaInicioSentencia"
+      caption="Inicio"
+      cellTemplate="fechaInicioTemplate">
+    </dxi-column>
+
+    <dxi-column
+      dataField="fechaFinSentencia"
+      caption="Fin"
+      cellTemplate="fechaFinTemplate">
+    </dxi-column>
+
+    <div *dxTemplate="let data of 'fechaInicioTemplate'">
+      {{ data.data.fechaInicioSentencia | date:'dd/MM/yyyy' }}
+    </div>
+
+    <div *dxTemplate="let data of 'fechaFinTemplate'">
+      {{ data.data.fechaFinSentencia | date:'dd/MM/yyyy' }}
+    </div>
+
+  </dx-data-grid>
+</div>
+
+</div>
+

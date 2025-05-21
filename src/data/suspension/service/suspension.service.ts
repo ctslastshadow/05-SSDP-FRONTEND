@@ -15,6 +15,9 @@ import { IGetDatosCiudadanoViewModel } from "src/domain/suspension/viewModels/i-
 import { IInsertarSuspensionRsViewModel } from "../models/suspension.model";
 import { IGetInsertarSuspensionViewModel } from "src/domain/suspension/viewModels/i-suspension.viewModel";
 
+import { ISuspensionByEstadoRsViewModel } from "../models/suspension.model";
+import { IGetSuspensionesByEstadoViewModel } from "src/domain/suspension/viewModels/i-suspension.viewModel";
+
 import { suspensionMapper} from "../mappers/suspension-mapper";
 import { IResponseStatusViewModel } from "src/domain/general/i-response-status.viewModel";
 
@@ -63,6 +66,21 @@ export class SuspensionService extends ASuspensionService {
         console.log('URL Ingreso Sentencia:', url); 
         console.log(' Ingreso Sentencia BODY que se enviará:', body); 
         return this._http.post<any>(url, this._mapper.mapGetInsertarSentenciaTo(body)).pipe(
+        
+            catchError((error) => {
+                console.log("error" +body)
+                return of(this._statusResponseService.error(error));
+            })
+        );
+    }
+    
+
+    public getSuspensionByEstadoService(body: IGetSuspensionesByEstadoViewModel): Observable<ISuspensionByEstadoRsViewModel> {
+        
+        const url = `${this.urlServiciosSSDP}Suspension/ListarDatosSuspensionesByEstado`;
+        console.log('URL Ingreso Sentencia:', url); 
+        console.log(' Seleccionar Sentencias Por ESTADO --- BODY que se enviará:', body); 
+        return this._http.post<any>(url, this._mapper.mapGetSentenciaByEstadoTo(body)).pipe(
         
             catchError((error) => {
                 console.log("error" +body)

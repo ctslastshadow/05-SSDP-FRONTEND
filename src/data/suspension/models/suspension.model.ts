@@ -95,5 +95,41 @@ export interface IGetInsertarSuspensionModel {
 }
 
 
+/////////////////////////Seleccionar la Suspension por estado////////////////////////
+//Respuesta esperada del endpoint
+export interface ISuspensionByEstadoRsViewModel extends IResponseStatusViewModel {
+    data?: ISuspensionByEstadoViewModel[];
 
+}
+export interface ISuspensionByEstadoViewModel {
+    nombre: string | null;
+    codigoSuspension: string | null;
+    cedula: string | null;
+    nombreCiudadano: string | null;
+    estadoCiudadano: string | null;
+    nombreInstitucion: string | null;
+    numeroSentencia: string | null;
+    duracion: string | null;
+    tipoDuracion: string | null;
+    fechaInicioSentencia: string | null;
+    fechaFinSentencia: string | null;
+    fuente: string | null;
+    urlDocumentoSentencia: string | null;
+    info: string | null;
+
+}
+
+//Modelo de Ingreso de datos
+export interface IGetSuspensionByEstadoModel {
+    auditoria: {
+        usuario: string;
+        proceso: number;
+        ip: string;
+        navegador: string;
+        tipoRequest: string;
+        descripcionRequest: string;
+        servidor: string;
+    };
+    codigoEstadoCiudadano: string;
+}
 

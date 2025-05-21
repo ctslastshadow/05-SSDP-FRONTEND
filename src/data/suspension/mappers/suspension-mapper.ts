@@ -10,6 +10,9 @@ import { IGetDatosCiudadanoModel} from "../models/suspension.model";
 import { IGetInsertarSuspensionViewModel } from "src/domain/suspension/viewModels/i-suspension.viewModel";
 import { IGetInsertarSuspensionModel } from "../models/suspension.model";
 
+import { IGetSuspensionesByEstadoViewModel } from "src/domain/suspension/viewModels/i-suspension.viewModel";
+import { IGetSuspensionByEstadoModel } from "../models/suspension.model";
+
 
 export class suspensionMapper extends AMapper<any, any> {
     public clientIp: string;
@@ -71,7 +74,7 @@ export class suspensionMapper extends AMapper<any, any> {
                 proceso: this.process  ,
                 ip: this.clientIp ?? '' ,         
                 navegador: this.clientBrowser ?? '' , 
-                tipoRequest: 'C',
+                tipoRequest: 'I',
                 descripcionRequest: 'Consulta Insertar sentencia ',
                 servidor: 'backend.apps.cne.gob.ec'
             },
@@ -91,6 +94,25 @@ export class suspensionMapper extends AMapper<any, any> {
 
         };
         console.log('body mapper mapGetInsertarSentenciaTo ', body);
+        return body;
+    }
+
+        mapGetSentenciaByEstadoTo(param: IGetSuspensionesByEstadoViewModel): IGetSuspensionByEstadoModel {
+        // Crear el cuerpo completo con todos los campos
+        let body = {
+            auditoria: {
+                usuario: this.usercode ?? '' ,
+                proceso: this.process ,
+                ip: this.clientIp ?? '' ,         
+                navegador: this.clientBrowser ?? '' , 
+                tipoRequest: 'C',
+                descripcionRequest: 'Consulta Sentencias Por EstadoCiudadano',
+                servidor: 'backend.apps.cne.gob.ec'
+            },
+            codigoEstadoCiudadano: param.codigoEstadoCiudadano ?? '' 
+            
+        };
+        console.log('body mapper mapGetSuspensionesByEstadoTo ', body); 
         return body;
     }
 

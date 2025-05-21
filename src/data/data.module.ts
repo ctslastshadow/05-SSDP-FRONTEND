@@ -24,6 +24,7 @@ import { suspensionMapper } from './suspension/mappers/suspension-mapper';
 import { GetExistenciaSuspensionUseCase } from 'src/domain/suspension/useCases/get-existenciaSuspension.useCase';
 import { GetDatosCiudadanoUseCase } from 'src/domain/suspension/useCases/get-datosCiudadano.useCase';
 import { GetInsertarSuspensionUseCase } from 'src/domain/suspension/useCases/get-insertarSuspension.useCase';
+import { GetSuspensionByEstadoUseCase } from 'src/domain/suspension/useCases/get-suspensionesByEstado.useCase';
 //restitucion
 import { ARestitucionService } from 'src/domain/restitucion/services/a-restitucion-service';
 import { RestitucionService } from './restitucion/service/restitucion.service';
@@ -93,6 +94,16 @@ export const getInsertarSentenciaUseCaseProvider = {
   deps: [ASuspensionService],
 };
 
+//* Buscar Suspensiones por Estado
+const GetSuspensionByEstadoUseCaseFactory =
+  (aSuspensionService: ASuspensionService) => new GetSuspensionByEstadoUseCase(aSuspensionService);
+
+export const getSentenciaByEstadoUseCaseProvider = {
+  provide: GetSuspensionByEstadoUseCase,
+  useFactory: GetSuspensionByEstadoUseCaseFactory,
+  deps: [ASuspensionService],
+};
+
 //* Buscar Sentencias Ciudadano
 const GetSuspensionCiudadanoUseCaseFactory =
   (aRestitucionService: ARestitucionService) => new GetSuspensionCiudadanoUseCase(aRestitucionService);
@@ -124,6 +135,7 @@ export const getInsertarRestitucionUseCaseProvider = {
     getInsertarSentenciaUseCaseProvider,
     getSentenciaCiudadanoUseCaseProvider,
     getInsertarRestitucionUseCaseProvider,
+    getSentenciaByEstadoUseCaseProvider,
 
     //Mappers
     CJudicaturaMapper,

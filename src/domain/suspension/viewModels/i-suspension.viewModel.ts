@@ -23,4 +23,7 @@ export interface IGetInsertarSuspensionViewModel {
     codigoUsuario: string;
 }
 
+export interface IGetSuspensionesByEstadoViewModel {
+    codigoEstadoCiudadano: string;
+}
 
