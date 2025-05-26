@@ -18,3 +18,17 @@ export interface IGetInsertarRestitucionViewModel {
 }
 
 
+
+export interface IGetVerificarSuspensionesActivasViewModel {
+    cedula: string;
+}
+
+
+export interface IGetActualizarEstadoSuspensionViewModel {
+    codigoSuspension: string;
+    codigoEstadoCiudadano: string;
+    codigoTransaccion: string;
+    codigoUsuario: string;
+}
+
+

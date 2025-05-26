@@ -35,6 +35,9 @@ import { restitucionMapper } from './restitucion/mappers/restitucion-mapper';
 import { GetSuspensionCiudadanoUseCase } from 'src/domain/restitucion/useCases/get-suspensionCiudadano.useCase';
 import { GetInsertarRestitucionUseCase } from 'src/domain/restitucion/useCases/get-insertarRestitucion.useCase';
 
+import { GetVerificarSuspensionesActivasUseCase } from 'src/domain/restitucion/useCases/get-verificarSuspensionesActivas.useCase';
+import { GetActualizarEstadoSuspensionUseCase } from 'src/domain/restitucion/useCases/get-actualizarEstadoSuspension.useCase';
+
 
 import { ARepositoryService } from 'src/domain/archivos_sentencia/services/a-archivos_sentencia-service';
 import { RepositoryService } from './archivos_sentencia/service/archivos_sentencia.service';
@@ -135,6 +138,26 @@ export const getInsertarRestitucionUseCaseProvider = {
   deps: [ARestitucionService],
 };
 
+//* VerificarSuspensionesActivas
+const GetVerificarEstadoSuspensionUseCaseFactory =
+  (aRestitucionService: ARestitucionService) => new GetVerificarSuspensionesActivasUseCase(aRestitucionService);
+
+export const getVerificarEstadoSuspensionUseCaseProvider = {
+  provide: GetVerificarSuspensionesActivasUseCase,
+  useFactory: GetVerificarEstadoSuspensionUseCaseFactory,
+  deps: [ARestitucionService],
+};
+
+//* modificarEstadoSUspension
+const GetActualizarEstadoSuspensionUseCaseFactory =
+  (aRestitucionService: ARestitucionService) => new GetActualizarEstadoSuspensionUseCase(aRestitucionService);
+
+export const getActualizarEstadoSuspensionUseCaseProvider = {
+  provide: GetActualizarEstadoSuspensionUseCase,
+  useFactory: GetActualizarEstadoSuspensionUseCaseFactory,
+  deps: [ARestitucionService],
+};
+
 @NgModule({
   declarations: [],
   providers: [
@@ -148,6 +171,8 @@ export const getInsertarRestitucionUseCaseProvider = {
     getInsertarRestitucionUseCaseProvider,
     getSentenciaByEstadoUseCaseProvider,
     getGuardarAplicacionSuspensionUseCaseProvider,
+    getVerificarEstadoSuspensionUseCaseProvider,
+    getActualizarEstadoSuspensionUseCaseProvider,
 
     //Mappers
     CJudicaturaMapper,

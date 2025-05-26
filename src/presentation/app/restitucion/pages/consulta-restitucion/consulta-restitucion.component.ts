@@ -100,43 +100,6 @@ pdfUrl: SafeResourceUrl | null = null;
   });
 }
 
- cargarInfoRestitucion() {
-  if (!this.validarCedulaEcuatoriana(this.cedula)) {
-    this.alerts.alertMessage('Error', 'Ingrese una cédula válida de 10 dígitos.', 'error');
-    return;
-  }
-
-  const body: IGetSuspensionCiudadanoViewModel = {
-    cedula: this.cedula,
-    codigoEstadoCiudadano: '1'
-  };
-
-  this.loaderMain.display(true);
-
-  this._getSuspensionCiudadanoUseCase.getSuspensionCiudadano(body).subscribe({
-    next: (resp: any) => {
-
-      if (resp && resp.ok === false) {
-        this.resultado = [];
-        this.alerts.alertMessage('Error', resp.message, 'error');
-        return;
-      }
-
-      if (Array.isArray(resp) && resp.length > 0 && resp[0].info === 'OK') {
-        this.resultado = resp;
-      } else {
-        this.resultado = [];
-        this.alerts.alertMessage('Información', 'No existen suspensiones registradas.', 'info');
-      }
-    },
-    error: (err) => {
-      this.resultado = [];
-      this.alerts.alertMessage('Error', 'No se pudo consultar las suspensiones. Error del servidor.', 'error');
-    },
-    complete: () => this.loaderMain.display(false)
-  });
-}
-
 
  verPDF(path: string): void {
   const url = `${this.baseFileUrl}Get?file=${encodeURIComponent(path)}`;
@@ -300,7 +263,7 @@ enviarDatosRestitucion() {
     }
       this.mostrarFormularioIngresoRestitucion = false;
       this.limpiarFormIngreso();
-      this.cargarInfoRestitucion();
+      this.buscarInfoRestitucion();
       this.loaderMain.display(false);
    },
     error: (err) => {

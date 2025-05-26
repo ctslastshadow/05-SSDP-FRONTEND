@@ -1,58 +1,115 @@
 <div *ngIf="loaderMain.status | async" class="loader-overlay">
   <div class="loader"></div>
-   <div class="loader-message">Espere por favor...</div>
+  <div class="loader-message">Espere por favor...</div>
 </div>
 <div class="contenedor-principal">
-<div class="busqueda-container">
-  <h1 class="titulo-principal">Aplicación - Restitucion de Derechos Políticos</h1>
-</div>
+  <div class="busqueda-container">
+    <h1 class="titulo-principal">Aplicación al Registro Electoral - Restitución de Derechos Políticos</h1>
+  </div>
 
-<div class="panel-sentencias rc" *ngIf="resultado.length">
+  <div class="panel-sentencias cj" *ngIf="resultado.length">
     <h3 class="panel-title">Restituciones Ingresadas</h3>
- <p *ngIf="mostrarMensajeDataRestitucion" 
-     [ngClass]="{ 'texto-error': esErrorDataRestitucion, 'texto-exito': !esErrorDataRestitucion }"
-     style="padding-left: 30px;">
-    {{ mensajeDataRestitucion }}
-  </p>
 
-  <dx-data-grid
-    *ngIf="resultado && resultado.length"
-    [dataSource]="resultado"
-    [showBorders]="true"
-    [columnAutoWidth]="true"
-    [rowAlternationEnabled]="true"
-    class="tabla-resultado"
-  >
-    <dxi-column dataField="codigoSuspension" caption="codigoSuspension" [visible]="false"></dxi-column>
-    <dxi-column dataField="nombreCiudadano" caption="Ciudadano"></dxi-column>
-    <dxi-column dataField="cedula" caption="Cédula"></dxi-column>
-    <dxi-column dataField="numeroSentencia" caption="Nro. Proceso/Causa"></dxi-column>
-    <dxi-column dataField="nombreInstitucion" caption="Institución"></dxi-column>
-    <dxi-column dataField="estadoCiudadano" caption="Estado"></dxi-column>
-    <dxi-column dataField="tipoDuracion" caption="Duración"></dxi-column>
+    <dx-data-grid
+      #dataGrid
+      keyExpr="codigoSuspension"
+      [dataSource]="resultado"
+      [showBorders]="true"
+      [columnAutoWidth]="true"
+      [rowAlternationEnabled]="true"
+      class="tabla-resultado"
+    >
+      <!-- Toolbar con botones globales y exportar + aplicar seleccionados -->
+      <dxo-toolbar>
+        <dxi-item name="searchPanel" />
+        <dxi-item name="exportButton" showText="always" />
+        <dxi-item location="before">
+          <dx-button
+            text="Aplicar seleccionados"
+            (onClick)="procesarSeleccionados()"
+            [disabled]="!dataGrid?.selectedRowKeys?.length"
+            type="default"
+          ></dx-button>
+        </dxi-item>
+      </dxo-toolbar>
 
-    <dxi-column
-      dataField="fechaInicioSentencia"
-      caption="Inicio"
-      cellTemplate="fechaInicioTemplate">
-    </dxi-column>
+      <!-- Configuración de export a Excel -->
+      <dxo-export
+        [enabled]="true"
+        [fileName]="exportFileName"
+        [allowExportSelectedData]="true"
+      ></dxo-export>
 
-    <dxi-column
-      dataField="fechaFinSentencia"
-      caption="Fin"
-      cellTemplate="fechaFinTemplate">
-    </dxi-column>
+      <!-- Búsqueda global -->
+      <dxo-search-panel [visible]="true" [width]="240" placeholder="Buscar..."></dxo-search-panel>
 
-    <div *dxTemplate="let data of 'fechaInicioTemplate'">
-      {{ data.data.fechaInicioSentencia | date:'dd/MM/yyyy' }}
-    </div>
+      <!-- Paginación -->
+      <dxo-paging [enabled]="true" [pageSize]="10"></dxo-paging>
+      <dxo-pager
+        [visible]="true"
+        [showPageSizeSelector]="true"
+        [allowedPageSizes]="[5,10,20]"
+        [showInfo]="true"
+        [showNavigationButtons]="true"
+      ></dxo-pager>
 
-    <div *dxTemplate="let data of 'fechaFinTemplate'">
-      {{ data.data.fechaFinSentencia | date:'dd/MM/yyyy' }}
-    </div>
+      <!-- Selección múltiple -->
+      <dxo-selection mode="multiple" showCheckBoxesMode="always"></dxo-selection>
 
-  </dx-data-grid>
+      <!-- Columnas de datos -->
+      <dxi-column dataField="codigoSuspension" caption="codigoSuspension" [visible]="false"></dxi-column>
+      <dxi-column dataField="nombreCiudadano" caption="Ciudadano"></dxi-column>
+      <dxi-column dataField="cedula" caption="Cédula"></dxi-column>
+      <dxi-column dataField="numeroSentencia" caption="Nro. Proceso/Causa"></dxi-column>
+      <dxi-column dataField="nombreInstitucion" caption="Institución"></dxi-column>
+      <dxi-column dataField="estadoCiudadano" caption="Estado"></dxi-column>
+      <dxi-column dataField="tipoDuracion" caption="Duración"></dxi-column>
+
+      <dxi-column dataField="fechaInicioSentencia" caption="Inicio" cellTemplate="fechaInicioTemplate"></dxi-column>
+      <dxi-column dataField="fechaFinSentencia" caption="Fin" cellTemplate="fechaFinTemplate"></dxi-column>
+
+      <!-- Templates de fecha -->
+      <div *dxTemplate="let data of 'fechaInicioTemplate'">
+        {{ data.data.fechaInicioSentencia | date:'dd/MM/yyyy' }}
+      </div>
+      <div *dxTemplate="let data of 'fechaFinTemplate'">
+        {{ data.data.fechaFinSentencia | date:'dd/MM/yyyy' }}
+      </div>
+    </dx-data-grid>
+  </div>
 </div>
 
-</div>
-
+<dx-popup
+  [(visible)]="popupVisible"
+  [showTitle]="true"
+  title="Resumen de Procesamiento"
+  [width]="650"
+  [height]="560"
+  (onHiding)="popupVisible = false"
+>
+  <div class="popup-header" style="padding: 8px;">
+    <strong>{{ summaryMessage }}</strong>
+  </div>
+  <div class="popup-content" style="height:360px; overflow-y:auto; padding: 8px;">
+    <dx-data-grid
+      [dataSource]="summaryResults"
+      [showBorders]="true"
+      [columnAutoWidth]="true"
+      [height]="'100%'"
+      [scrolling]="{ mode: 'virtual' }"
+    >
+      <dxi-column dataField="cedula" caption="Cédula"></dxi-column>
+      <dxi-column dataField="info" caption="Estado"></dxi-column>
+      <dxi-column dataField="message" caption="Mensaje"></dxi-column>
+    </dx-data-grid>
+  </div>
+  <div class="botones-formulario mt-4 text-center">
+    <dx-button
+      text="Cerrar"
+      stylingMode="contained"
+      type="success"
+      icon="close"
+      (onClick)="popupVisible = false"
+    ></dx-button>
+  </div>
+</dx-popup>

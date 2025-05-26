@@ -13,6 +13,14 @@ import { IGetSuspensionCiudadanoViewModel } from "src/domain/restitucion/viewMod
 import { IInsertarRestitucionRsViewModel } from "../models/restitucion.model";
 import { IGetInsertarRestitucionViewModel } from "src/domain/restitucion/viewModels/i-restitucion.viewModel";
 
+import { IVerificarSuspensionesActivasRsViewModel } from "../models/restitucion.model";
+import { IGetVerificarSuspensionesActivasViewModel } from "src/domain/restitucion/viewModels/i-restitucion.viewModel";
+
+
+import { IActualizarEstadoSuspensionRsViewModel } from "../models/restitucion.model";
+import { IGetActualizarEstadoSuspensionViewModel } from "src/domain/restitucion/viewModels/i-restitucion.viewModel";
+
+
 import { restitucionMapper } from "../mappers/restitucion-mapper";
 import { IResponseStatusViewModel } from "src/domain/general/i-response-status.viewModel";
 
@@ -46,6 +54,35 @@ export class RestitucionService extends ARestitucionService {
         console.log('URL Ingreso Sentencia:', url); 
         console.log(' Ingreso Sentencia BODY que se enviará:', body); 
         return this._http.post<any>(url, this._mapper.mapGetInsertarRestitucionTo(body)).pipe(
+        
+            catchError((error) => {
+                console.log("error" +body)
+                return of(this._statusResponseService.error(error));
+            })
+        );
+    }
+
+       public getVerificarSuspensionesActivasService(body: IGetVerificarSuspensionesActivasViewModel): Observable<IVerificarSuspensionesActivasRsViewModel> {
+     
+        const url = `${this.urlServiciosSSDP}Restitucion/VerificarSuspensionesActivas`;
+        console.log('URL Verificar Suspensiones Activas:', url); 
+        console.log(' Ingreso Body Verificar Suspensiones Activas:', body); 
+        return this._http.post<any>(url, this._mapper.mapGetVerificarSuspensionesActivasTo(body)).pipe(
+        
+            catchError((error) => {
+                console.log("error" +body)
+                return of(this._statusResponseService.error(error));
+            })
+        );
+    }
+
+
+     public getActualizarEstadoSuspesnsionService(body: IGetActualizarEstadoSuspensionViewModel): Observable<IActualizarEstadoSuspensionRsViewModel> {
+     
+        const url = `${this.urlServiciosSSDP}Restitucion/ActualizarEstadoSuspencion`;
+        console.log('URL Actualizar estado Suspension:', url); 
+        console.log(' Ingreso Body actualizar estado suspension:', body); 
+        return this._http.post<any>(url, this._mapper.mapGetModificarEstadoSuspensionTo(body)).pipe(
         
             catchError((error) => {
                 console.log("error" +body)

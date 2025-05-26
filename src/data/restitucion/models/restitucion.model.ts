@@ -72,5 +72,61 @@ export interface IGetInsertarRestitucionModel {
 }
 
 
+/////////////////////////verificar suspensiones activas////////////////////////
+//Respuesta esperada del endpoint
+export interface IVerificarSuspensionesActivasRsViewModel extends IResponseStatusViewModel {
+    data?: IVerificarSuspensionesActivasViewModel[];
+
+}
+export interface IVerificarSuspensionesActivasViewModel {
+    info: string | null;
+    mensaje: string | null;
+    suspensionesActivas: string | null;
+}
+
+//Modelo de Ingreso de datos
+export interface IGetVerificarSuspensionesActivasModel {
+    auditoria: {
+        usuario: string;
+        proceso: number;
+        ip: string;
+        navegador: string;
+        tipoRequest: string;
+        descripcionRequest: string;
+        servidor: string;
+    };
+    cedula: string;
+}
+
+
+
+/////////////////////////Actualizar estado de la Suspension ////////////////////////
+//Respuesta esperada del endpoint
+export interface IActualizarEstadoSuspensionRsViewModel extends IResponseStatusViewModel {
+    data?: IActualizarEstadoSuspensionViewModel[];
+
+}
+export interface IActualizarEstadoSuspensionViewModel {
+    info: string | null;
+    mensaje: string | null;
+}
+
+//Modelo de Ingreso de datos
+export interface IGetActualizarEstadoSuspensionModel {
+    auditoria: {
+        usuario: string;
+        proceso: number;
+        ip: string;
+        navegador: string;
+        tipoRequest: string;
+        descripcionRequest: string;
+        servidor: string;
+    };
+    codigoSuspension: string;
+    codigoEstadoCiudadano: string;
+    codigoTransaccion: string;
+    codigoUsuario: string;
+}
+
 
 
