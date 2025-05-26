@@ -27,3 +27,15 @@ export interface IGetSuspensionesByEstadoViewModel {
     codigoEstadoCiudadano: string;
 }
 
+
+export interface IGetGuardarAplicacionSuspensionViewModel {
+    codigoEstadoCiudadano: string;
+    codigoSuspension: string;
+    tipoTramite: string;
+    codigoRegistroElectoral: string;
+    observacion: string;
+    codigoTransaccion: string;
+    codigoUsuario: string;
+}
+
+

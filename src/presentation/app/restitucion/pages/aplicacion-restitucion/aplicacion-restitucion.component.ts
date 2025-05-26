@@ -33,7 +33,7 @@ export class AplicacionRestitucionComponent implements OnInit {
 
   buscarInfoRestitucion(): void {
     const body: IGetSuspensionesByEstadoViewModel = {
-      codigoEstadoCiudadano: '3' // Estado a consultar
+      codigoEstadoCiudadano: '4' // Estado a consultar
     };
 
     this.loaderMain.display(true);

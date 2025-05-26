@@ -133,3 +133,35 @@ export interface IGetSuspensionByEstadoModel {
     codigoEstadoCiudadano: string;
 }
 
+
+/////////////////////////Guardar la Aplicación de Suspension////////////////////////
+
+//Respuesta esperada del endpoint
+export interface IGuardarAplicacionSuspensionRsViewModel extends IResponseStatusViewModel {
+    data?: IGuardarAplicacionSuspensionViewModel[];
+}
+export interface IGuardarAplicacionSuspensionViewModel { 
+    info: string | null;
+    mensaje: string | null;
+}
+
+//Modelo de Ingreso de datos
+export interface IGetGuardarAplicacionSuspensionModel {
+    auditoria: {
+        usuario: string;
+        proceso: number;
+        ip: string;
+        navegador: string;
+        tipoRequest: string;
+        descripcionRequest: string;
+        servidor: string;
+    };
+    codigoEstadoCiudadano: string;
+    codigoSuspension: string;
+    tipoTramite: string;
+    codigoRegistroElectoral: string;
+    observacion: string;
+    codigoTransaccion: string;
+    codigoUsuario: string;
+}
+

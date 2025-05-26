@@ -18,6 +18,9 @@ import { IGetInsertarSuspensionViewModel } from "src/domain/suspension/viewModel
 import { ISuspensionByEstadoRsViewModel } from "../models/suspension.model";
 import { IGetSuspensionesByEstadoViewModel } from "src/domain/suspension/viewModels/i-suspension.viewModel";
 
+import { IGuardarAplicacionSuspensionRsViewModel } from "../models/suspension.model";
+import { IGetGuardarAplicacionSuspensionViewModel } from "src/domain/suspension/viewModels/i-suspension.viewModel";
+
 import { suspensionMapper} from "../mappers/suspension-mapper";
 import { IResponseStatusViewModel } from "src/domain/general/i-response-status.viewModel";
 
@@ -34,7 +37,7 @@ export class SuspensionService extends ASuspensionService {
 
     public getExistenciaSuspencionService(body: IGetExistenciaSuspensionViewModel): Observable<IExistenciaSuspensionRsViewModel> {
      
-        const url = `${this.urlServiciosSSDP}Suspension/ListarDatosNumeroSentencia`;
+        const url = `${this.urlServiciosSSDP}Suspension/ListarExisteNumeroSentencia`;
         console.log('URL verificar Existencia Sentencia :', url); 
         console.log(' Existencia Sentencia BODY que se enviará:', body); 
         return this._http.post<any>(url, this._mapper.mapGetExistenciaSuspensionTo(body)).pipe(
@@ -62,7 +65,7 @@ export class SuspensionService extends ASuspensionService {
 
     public getInsertarSuspensionService(body: IGetInsertarSuspensionViewModel): Observable<IInsertarSuspensionRsViewModel> {
         
-        const url = `${this.urlServiciosSSDP}Suspension/GuardarSuspension`;
+        const url = `${this.urlServiciosSSDP}Suspension/GuardarIngresoSuspension`;
         console.log('URL Ingreso Sentencia:', url); 
         console.log(' Ingreso Sentencia BODY que se enviará:', body); 
         return this._http.post<any>(url, this._mapper.mapGetInsertarSentenciaTo(body)).pipe(
@@ -78,9 +81,23 @@ export class SuspensionService extends ASuspensionService {
     public getSuspensionByEstadoService(body: IGetSuspensionesByEstadoViewModel): Observable<ISuspensionByEstadoRsViewModel> {
         
         const url = `${this.urlServiciosSSDP}Suspension/ListarDatosSuspensionesByEstado`;
-        console.log('URL Ingreso Sentencia:', url); 
+        console.log('URL Listar Suspensiones por estado:', url); 
         console.log(' Seleccionar Sentencias Por ESTADO --- BODY que se enviará:', body); 
         return this._http.post<any>(url, this._mapper.mapGetSentenciaByEstadoTo(body)).pipe(
+        
+            catchError((error) => {
+                console.log("error" +body)
+                return of(this._statusResponseService.error(error));
+            })
+        );
+    }
+
+     public getGuardarAplicacionSuspensionService(body: IGetGuardarAplicacionSuspensionViewModel): Observable<IGuardarAplicacionSuspensionRsViewModel> {
+        
+        const url = `${this.urlServiciosSSDP}Suspension/GuardarAplicacionTramiteRegistroElec`;
+        console.log('URL guardar aplicacion Suspension:', url); 
+        console.log(' guardar aplicacion suspension --- BODY que se enviará:', body); 
+        return this._http.post<any>(url, this._mapper.mapGetGuardarAplicacionSuspensionTo(body)).pipe(
         
             catchError((error) => {
                 console.log("error" +body)

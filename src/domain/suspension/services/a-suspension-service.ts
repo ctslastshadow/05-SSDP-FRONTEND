@@ -13,6 +13,9 @@ import { IInsertarSuspensionRsViewModel } from "src/data/suspension/models/suspe
 import { IGetSuspensionesByEstadoViewModel } from "../viewModels/i-suspension.viewModel";
 import { ISuspensionByEstadoRsViewModel } from "src/data/suspension/models/suspension.model";
 
+import { IGetGuardarAplicacionSuspensionViewModel } from "../viewModels/i-suspension.viewModel";
+import { IGuardarAplicacionSuspensionRsViewModel } from "src/data/suspension/models/suspension.model";
+
 // Aquí se toma los datos de domain/models y data models de como los metodos usaran la respuesta
 export abstract class ASuspensionService {
     public abstract getExistenciaSuspencionService(body: IGetExistenciaSuspensionViewModel): Observable<IExistenciaSuspensionRsViewModel>;
@@ -22,5 +25,7 @@ export abstract class ASuspensionService {
     public abstract getInsertarSuspensionService(body: IGetInsertarSuspensionViewModel): Observable<IInsertarSuspensionRsViewModel>;
 
     public abstract getSuspensionByEstadoService(body: IGetSuspensionesByEstadoViewModel): Observable<ISuspensionByEstadoRsViewModel>;
+
+    public abstract getGuardarAplicacionSuspensionService(body: IGetGuardarAplicacionSuspensionViewModel): Observable<IGuardarAplicacionSuspensionRsViewModel>;
 
 }

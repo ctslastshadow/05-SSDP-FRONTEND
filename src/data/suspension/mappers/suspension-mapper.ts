@@ -13,6 +13,8 @@ import { IGetInsertarSuspensionModel } from "../models/suspension.model";
 import { IGetSuspensionesByEstadoViewModel } from "src/domain/suspension/viewModels/i-suspension.viewModel";
 import { IGetSuspensionByEstadoModel } from "../models/suspension.model";
 
+import { IGetGuardarAplicacionSuspensionViewModel } from "src/domain/suspension/viewModels/i-suspension.viewModel";
+import { IGetGuardarAplicacionSuspensionModel  } from "../models/suspension.model";
 
 export class suspensionMapper extends AMapper<any, any> {
     public clientIp: string;
@@ -97,7 +99,7 @@ export class suspensionMapper extends AMapper<any, any> {
         return body;
     }
 
-        mapGetSentenciaByEstadoTo(param: IGetSuspensionesByEstadoViewModel): IGetSuspensionByEstadoModel {
+    mapGetSentenciaByEstadoTo(param: IGetSuspensionesByEstadoViewModel): IGetSuspensionByEstadoModel {
         // Crear el cuerpo completo con todos los campos
         let body = {
             auditoria: {
@@ -117,5 +119,29 @@ export class suspensionMapper extends AMapper<any, any> {
     }
 
 
+     mapGetGuardarAplicacionSuspensionTo(param: IGetGuardarAplicacionSuspensionViewModel): IGetGuardarAplicacionSuspensionModel {
+        // Crear el cuerpo completo con todos los campos
+        let body = {
+            auditoria: {
+                usuario: this.usercode ?? '' ,
+                proceso: this.process ,
+                ip: this.clientIp ?? '' ,         
+                navegador: this.clientBrowser ?? '' , 
+                tipoRequest: 'C',
+                descripcionRequest: 'Guardar Aplicación Suspensión',
+                servidor: 'backend.apps.cne.gob.ec'
+            },
+            codigoEstadoCiudadano: param.codigoEstadoCiudadano ?? '',
+            codigoSuspension: param.codigoSuspension ?? '',
+            tipoTramite: param.tipoTramite ?? '',
+            codigoRegistroElectoral: param.codigoRegistroElectoral ?? '',
+            observacion: param.observacion ?? '',
+            codigoTransaccion: param.codigoTransaccion ?? '',
+            codigoUsuario:this.usercode ?? '' ,
+            
+        };
+        console.log('body mapper mapGetGuardarAplicacionSuspensionTo ', body); 
+        return body;
+    }
 
 }

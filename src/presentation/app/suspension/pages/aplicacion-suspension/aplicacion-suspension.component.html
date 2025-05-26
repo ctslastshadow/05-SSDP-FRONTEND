@@ -9,11 +9,6 @@
 
   <div class="panel-sentencias rc" *ngIf="resultado.length">
     <h3 class="panel-title">Suspensiones Ingresadas</h3>
-    <p *ngIf="mostrarMensajeDataSuspension"
-       [ngClass]="{ 'texto-error': esErrorDataSuspension, 'texto-exito': !esErrorDataSuspension }"
-       style="padding-left: 30px;">
-      {{ mensajeDataSuspension }}
-    </p>
 
     <dx-data-grid
       #dataGrid
@@ -113,7 +108,7 @@
       text="Cerrar"
       stylingMode="contained"
       type="success"
-      icon="save"
+      icon="close"
       (onClick)="popupVisible = false"
     ></dx-button>
   </div>

@@ -42,7 +42,7 @@ export class RestitucionService extends ARestitucionService {
 
     public getInsertarRestitucionService(body: IGetInsertarRestitucionViewModel): Observable<IInsertarRestitucionRsViewModel> {
      
-        const url = `${this.urlServiciosSSDP}Restitucion/GuardarRestitucion`;
+        const url = `${this.urlServiciosSSDP}Restitucion/GuardarIngresoRestitucion`;
         console.log('URL Ingreso Sentencia:', url); 
         console.log(' Ingreso Sentencia BODY que se enviará:', body); 
         return this._http.post<any>(url, this._mapper.mapGetInsertarRestitucionTo(body)).pipe(
